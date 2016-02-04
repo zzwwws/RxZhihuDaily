@@ -3,14 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
-    <item android:id="@+id/message"
-        android:title="@string/message"
-        android:orderInCategory="80"
+    <item
+        android:id="@+id/message"
         android:icon="@drawable/message"
-        app:showAsAction="ifRoom" />
+        android:title="@string/message"
+        app:showAsAction="ifRoom"/>
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never"/>
+    <item android:id="@+id/action_search"
+        android:title="@string/dark_mode"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/setting_mode"
+        app:showAsAction="never" >
+    </item>
 </menu>

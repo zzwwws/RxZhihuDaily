@@ -9,5 +9,7 @@
 
     <!--menu-->
     <string name="message">消息</string>
+    <string name="dark_mode">夜间模式</string>
+    <string name="setting_mode">设置选项</string>
 
 </resources>
