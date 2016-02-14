@@ -7,6 +7,11 @@
     <string name="open_drawer">openDrawer</string>
     <string name="close_drawer">closeDrawer</string>
 
+    <string name="head_name_no_login">请登录</string>
+    <string name="my_favorite">我的收藏</string>
+    <string name="download_offline">离线下载</string>
+    <string name="homepage">首页</string>
+
     <!--menu-->
     <string name="message">消息</string>
     <string name="dark_mode">夜间模式</string>

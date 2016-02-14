@@ -29,12 +29,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RecyclerView"
-        android:layout_width="320dp"
+        android:layout_width="305dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-
-        android:background="@color/ColorPrimary"
-        android:scrollbars="vertical">
+        android:scrollbars="none">
 
     </android.support.v7.widget.RecyclerView>
 

@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp"
+    android:paddingRight="50dp"
+    android:paddingLeft="20dp"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
-    android:orientation="horizontal">
-
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rowIcon"
-        android:paddingLeft="16dp"
-        android:src="@drawable/ic_launcher"/>
+    android:background="#ffffff">
 
     <TextView
+        android:id="@+id/rowText"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_16"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="12dp"
-        android:paddingTop="4dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/rowText" />
+        android:layout_height="wrap_content" />
 
-</LinearLayout>
+    <ImageView
+        android:layout_centerVertical="true"
+        android:id="@+id/rowIcon"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/menu_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
