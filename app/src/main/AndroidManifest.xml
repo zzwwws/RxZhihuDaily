@@ -11,11 +11,14 @@
         android:theme="@style/AppTheme" >
         <!-- 启动界面&主界面 -->
         <activity
-            android:name=".MainActivity"
+            android:name=".presenter.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/MainTheme">
+            android:theme="@style/MainTheme"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

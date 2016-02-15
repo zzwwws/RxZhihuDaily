@@ -1,4 +1,4 @@
-package com.github.zzwwws.rxzhihudaily.adapter;
+package com.github.zzwwws.rxzhihudaily.presenter.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
