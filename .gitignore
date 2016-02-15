@@ -6,9 +6,5 @@
 /build
 /.idea
 RxZhihuDaily.iml
-gradle.properties
 gradle/
-gradlew
-gradlew.bat
-settings.gradle
 /captures
