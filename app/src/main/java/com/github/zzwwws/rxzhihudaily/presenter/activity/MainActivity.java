@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.zzwwws.rxzhihudaily.R;
+import com.github.zzwwws.rxzhihudaily.model.service.ServiceRest;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.MenuAdapter;
 
 import rx.Observable;
@@ -83,28 +84,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void testRxJava(){
-        String[] names = new String[]{"h,e,l,l,o","R,x,J,a,v,a","!"};
-        Observable.from(names)
-                .flatMap(new Func1<String, Observable<String>>() {
-                    @Override
-                    public Observable<String> call(String s) {
-                        return Observable.from(s.split(","));
-                    }
-                })
-                .map(new Func1<String, String>() {
-                    @Override
-                    public String call(String s) {
-                        return s.toUpperCase();
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String name) {
-                        System.out.println(name);
-                    }
-                });
+//        String[] names = new String[]{"h,e,l,l,o","R,x,J,a,v,a","!"};
+//        Observable.from(names)
+//                .flatMap(new Func1<String, Observable<String>>() {
+//                    @Override
+//                    public Observable<String> call(String s) {
+//                        return Observable.from(s.split(","));
+//                    }
+//                })
+//                .map(new Func1<String, String>() {
+//                    @Override
+//                    public String call(String s) {
+//                        return s.toUpperCase();
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<String>() {
+//                    @Override
+//                    public void call(String name) {
+//                        System.out.println(name);
+//                    }
+//                });
+
+        ServiceRest rest = ServiceRest.getInstance();
+        rest.get(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
