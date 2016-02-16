@@ -16,14 +16,14 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  */
 public class ServiceRest {
 
-    private GithubService serviceApi;
+    private FetchService serviceApi;
 
     public ServiceRest() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://news-at.zhihu.com/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
-        serviceApi = retrofit.create(GithubService.class);
+        serviceApi = retrofit.create(FetchService.class);
     }
 
     public static ServiceRest getInstance() {
