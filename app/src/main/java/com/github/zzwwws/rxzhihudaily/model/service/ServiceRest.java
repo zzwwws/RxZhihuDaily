@@ -5,11 +5,13 @@ import android.widget.Toast;
 
 import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by zzwwws on 2016/2/15.
@@ -22,6 +24,7 @@ public class ServiceRest {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://news-at.zhihu.com/")
                 .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         serviceApi = retrofit.create(FetchService.class);
     }
@@ -31,21 +34,25 @@ public class ServiceRest {
     }
 
     public void get(final Context context) {
-        Call<LatestFeed> call = serviceApi.repoContributors();
+        Observable<LatestFeed> call = serviceApi.repoContributors();
+        call.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<LatestFeed>() {
+                    @Override
+                    public void onCompleted() {
 
-        //异步
-        call.enqueue(new Callback<LatestFeed>() {
-            @Override
-            public void onResponse(Call<LatestFeed> call, Response<LatestFeed> response) {
-                LatestFeed latestFeed = response.body();
-                Toast.makeText(context, latestFeed != null ? latestFeed.getDate() : "dlsf", Toast.LENGTH_SHORT).show();
-            }
+                    }
 
-            @Override
-            public void onFailure(Call<LatestFeed> call, Throwable t) {
-                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(LatestFeed latestFeed) {
+                        Toast.makeText(context, latestFeed != null ? latestFeed.getDate() : "dlsf", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private static class SingletonHolder {
