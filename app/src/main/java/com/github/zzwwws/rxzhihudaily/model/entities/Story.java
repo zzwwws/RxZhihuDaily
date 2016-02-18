@@ -145,7 +145,7 @@ public class Story {
      */
     @JsonProperty("multipic")
     public Boolean getMultipic() {
-        return multipic;
+        return multipic == null?false:multipic;
     }
 
     /**

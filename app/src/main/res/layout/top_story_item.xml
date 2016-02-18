@@ -5,16 +5,17 @@
     >
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="@dimen/top_story_height"
+        android:scaleType="centerCrop"
         android:id="@+id/img_top_story"/>
 
     <TextView
         android:id="@+id/tv_top_story"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_24"
+        android:textSize="@dimen/text_size_21"
         android:paddingLeft="18dp"
         android:paddingRight="18dp"
-        android:paddingBottom="30dp"
+        android:paddingBottom="25dp"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

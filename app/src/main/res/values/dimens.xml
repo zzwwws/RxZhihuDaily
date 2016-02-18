@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="tool_bar_top_padding">30dp</dimen>
+    <dimen name="top_story_height">220dp</dimen>
     <dimen name="text_size_8">8sp</dimen>
     <dimen name="text_size_9">9sp</dimen>
     <dimen name="text_size_10">10sp</dimen>

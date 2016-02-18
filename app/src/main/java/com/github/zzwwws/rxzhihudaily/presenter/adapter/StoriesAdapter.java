@@ -26,14 +26,10 @@ import butterknife.ButterKnife;
 /**
  * Created by zzwwws on 2016/2/18.
  */
-public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.ViewHolder> {
+public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int TYPE_HEADER = 0x01;
     public static final int TYPE_LIST_ITEM = 0x02;
-
-    public static final int ID_TOP_STORIES = 0x10;
-    public static final int ID_STORY_ITEM = 0x11;
-
 
     private Context context;
     private LatestFeed latestFeed;
@@ -45,11 +41,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.ViewHold
 
     public StoriesAdapter(Context context, LatestFeed latestFeed) {
         this.context = context;
-        this.latestFeed = latestFeed;
-        if (this.latestFeed != null) {
-            this.stories = this.latestFeed.getStories();
-            storyHeadPos.add(1);
-        }
+        init(latestFeed);
+    }
+
+    public void loadingNewStories(LatestFeed latestFeed){
+        init(latestFeed);
+        notifyDataSetChanged();
     }
 
     public void loadingOldStories(LatestFeed latestFeed) {
@@ -61,17 +58,26 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.ViewHold
         }
     }
 
+    private void init(LatestFeed latestFeed){
+        if(stories != null)stories.clear();
+        if(storyHeadPos != null)storyHeadPos.clear();
+        this.latestFeed = latestFeed;
+        if (this.latestFeed != null) {
+            this.stories = this.latestFeed.getStories();
+            storyHeadPos.add(1);
+        }
+    }
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.top_story_layout, parent, false);
-            ViewHolder vhItem = new ViewHolder(v, viewType);
+            TopViewHolder vhItem = new TopViewHolder(v);
 
             return vhItem;
 
         } else if (viewType == TYPE_LIST_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_item, parent, false);
-            ViewHolder vhItem = new ViewHolder(v, viewType);
+            StoryViewHolder vhItem = new StoryViewHolder(v);
 
             return vhItem;
         }
@@ -79,11 +85,11 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        if (holder.holderId == ID_TOP_STORIES) {
-            bindPagerData(holder);
-        } else if (holder.holderId == ID_STORY_ITEM) {
-            bindStoryData(holder, position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof TopViewHolder) {
+            bindPagerData((TopViewHolder)holder);
+        } else if (holder instanceof StoryViewHolder) {
+            bindStoryData((StoryViewHolder)holder, position);
         }
     }
 
@@ -104,11 +110,20 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.ViewHold
         return position == 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class TopViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.top_story_pager)
         AutoScrollViewPager topStoryPager;
         @Bind(R.id.top_pager_indicator)
         LinearLayout topPagerIndicator;
+
+        public TopViewHolder(View itemView){
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+    }
+
+    public static class StoryViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_story_title)
         TextView tvStoryTitle;
         @Bind(R.id.img_story_pic)
@@ -117,18 +132,15 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.ViewHold
         TextView tvStoryDesc;
         @Bind(R.id.img_story_multi_flag)
         ImageView imgStoryMultiFlag;
-        int holderId;
 
-        public ViewHolder(View itemView, int viewType) {
+        public StoryViewHolder(View itemView){
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-            holderId = viewType == TYPE_HEADER ? ID_TOP_STORIES : ID_STORY_ITEM;
         }
 
     }
 
-    private void bindPagerData(final ViewHolder holder) {
+    private void bindPagerData(final TopViewHolder holder) {
         if (topStoryAdapter == null) {
             topStoryAdapter = new TopStoryAdapter(context, latestFeed.getTopStories());
         }
@@ -149,7 +161,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.ViewHold
         topStoryAdapter.notifyDataSetChanged();
     }
 
-    private void setCurPage(ViewHolder holder, int pageCount, int page) {
+    private void setCurPage(TopViewHolder holder, int pageCount, int page) {
         holder.topPagerIndicator.removeAllViews();
 
         for (int i = 0; i < pageCount; i++) {
@@ -167,7 +179,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.ViewHold
         }
     }
 
-    private void bindStoryData(ViewHolder holder, int position) {
+    private void bindStoryData(StoryViewHolder holder, int position) {
         int tPos = position - 1;
 
         List<Story> stories = latestFeed.getStories();

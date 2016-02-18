@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/top_story_height"
     android:orientation="vertical">
 
     <com.github.zzwwws.rxzhihudaily.presenter.ui.widget.AutoScrollViewPager
         android:id="@+id/top_story_pager"
         android:layout_width="match_parent"
-        android:layout_height="130dp">
-
+        android:layout_height="@dimen/top_story_height">
     </com.github.zzwwws.rxzhihudaily.presenter.ui.widget.AutoScrollViewPager>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="6dp"
-        android:layout_marginTop="27dp"
-        android:background="#00000000">
-
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        >
         <LinearLayout
             android:id="@+id/top_pager_indicator"
             android:layout_width="wrap_content"
@@ -24,5 +23,4 @@
             android:layout_gravity="bottom|center"
             android:orientation="horizontal"></LinearLayout>
     </FrameLayout>
-
-</LinearLayout>
+</RelativeLayout>

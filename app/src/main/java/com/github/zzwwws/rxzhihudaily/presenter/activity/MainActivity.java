@@ -11,11 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.MenuAdapter;
+import com.github.zzwwws.rxzhihudaily.presenter.adapter.StoriesAdapter;
 import com.github.zzwwws.rxzhihudaily.presenter.impl.FetchFeedImpl;
 import com.github.zzwwws.rxzhihudaily.presenter.impl.RecyclerLoadingView;
 
@@ -29,14 +29,21 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
 
     @Bind(R.id.tool_bar)
     Toolbar toolbar;
-    @Bind(R.id.RecyclerView)
-    RecyclerView recyclerView;
+    @Bind(R.id.menu_recycler)
+    RecyclerView menuRecyclerView;
     @Bind(R.id.DrawerLayout)
     DrawerLayout drawerLayout;
+    @Bind(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.story_recycler)
+    RecyclerView storyRecyclerView;
 
     private String topics[] = new String[]{};
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter menuAdapter;
+    private RecyclerView.LayoutManager menuLayoutManager;
+
+    private StoriesAdapter storiesAdapter;
+    private RecyclerView.LayoutManager storyLayoutManager;
     private ActionBarDrawerToggle drawerToggle;
     private FetchFeedImpl fetchImpl;
 
@@ -53,16 +60,28 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
 
     private void initData() {
         topics = this.getResources().getStringArray(R.array.menu_topic_type);
-        adapter = new MenuAdapter(this, topics);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        menuAdapter = new MenuAdapter(this, topics);
+        menuRecyclerView.setHasFixedSize(true);
+        menuRecyclerView.setAdapter(menuAdapter);
+        menuLayoutManager = new LinearLayoutManager(this);
+        menuRecyclerView.setLayoutManager(menuLayoutManager);
         toolbar.setOnMenuItemClickListener(onMenuItemClickListener);
 
         fetchImpl = new FetchFeedImpl();
         fetchImpl.attachView(this);
 
+
+        storiesAdapter = new StoriesAdapter(this, new LatestFeed());
+        storyRecyclerView.setHasFixedSize(true);
+        storyRecyclerView.setAdapter(storiesAdapter);
+        storyLayoutManager = new LinearLayoutManager(this);
+        storyRecyclerView.setLayoutManager(storyLayoutManager);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchImpl.loadingNew();
+            }
+        });
         testRxJava();
     }
 
@@ -118,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
 
     @Override
     public void loadingNew(LatestFeed latestFeed) {
-        Toast.makeText(this, latestFeed.getDate(), Toast.LENGTH_SHORT).show();
+       storiesAdapter.loadingNewStories(latestFeed);
     }
 
     @Override
@@ -135,4 +154,5 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
     public void showError(int layoutId) {
 
     }
+
 }
