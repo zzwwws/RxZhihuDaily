@@ -1,17 +1,11 @@
 package com.github.zzwwws.rxzhihudaily.model.service;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import rx.Observable;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by zzwwws on 2016/2/15.
@@ -33,26 +27,12 @@ public class ServiceRest {
         return SingletonHolder.instance;
     }
 
-    public void get(final Context context) {
-        Observable<LatestFeed> call = serviceApi.repoContributors();
-        call.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<LatestFeed>() {
-                    @Override
-                    public void onCompleted() {
+    public Observable<LatestFeed> fetchLatest() {
+        return serviceApi.fetchLatest();
+    }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(LatestFeed latestFeed) {
-                        Toast.makeText(context, latestFeed != null ? latestFeed.getDate() : "dlsf", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    public Observable<LatestFeed> fetchOld(){
+        return serviceApi.fetchLatest();
     }
 
     private static class SingletonHolder {

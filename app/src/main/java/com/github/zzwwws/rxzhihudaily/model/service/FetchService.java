@@ -15,5 +15,5 @@ import rx.Observable;
  */
 public interface FetchService {
     @GET("api/4/stories/latest")
-    Observable<LatestFeed> repoContributors();
+    Observable<LatestFeed> fetchLatest();
 }

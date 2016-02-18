@@ -4,4 +4,26 @@
     <color name="white">#FFFFFF</color>
     <color name="ColorPrimary">#00A2ED</color>
     <color name="color_f0f0f0">#F0F0F0</color>
+
+    <color name="color_alpha_90_1a1a1a">#E51a1a1a</color>
+    <color name="color_alpha_90_203045">#E5203045</color>
+    <color name="color_alpha_90_4c3f3f">#E54c3f3f</color>
+    <color name="color_alpha_85_000000">#d8000000</color>
+    <color name="color_alpha_80_000000">#cc000000</color>
+    <color name="color_alpha_40_000000">#66000000</color>
+    <color name="color_alpha_15_000000">#26000000</color>
+    <color name="color_alpha_10_000000">#19000000</color>
+    <color name="color_alpha_40_ffffff">#99ffffff</color>
+    <color name="color_alpha_45_ffffff">#8cffffff</color>
+    <color name="color_alpha_50_ffffff">#80ffffff</color>
+    <color name="color_alpha_60_ffffff">#87ffffff</color>
+    <color name="color_alpha_70_ffffff">#49ffffff</color>
+    <color name="color_alpha_80_ffffff">#ccffffff</color>
+    <color name="color_alpha_90_ffffff">#e4ffffff</color>
+    <color name="color_alpha_96_ffffff">#f5ffffff</color>
+    <color name="color_alpha_30_ffffff">#43ffffff</color>
+    <color name="color_alpha_20_ffffff">#33ffffff</color>
+    <color name="color_alpha_15_ffffff">#26ffffff</color>
+    <color name="color_alpha_10_ffffff">#19ffffff</color>
+    <color name="color_alpha_5_ffffff">#0Cffffff</color>
 </resources>

@@ -2,6 +2,7 @@ package com.github.zzwwws.rxzhihudaily.presenter.activity;
 
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,60 +11,63 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.github.zzwwws.rxzhihudaily.R;
-import com.github.zzwwws.rxzhihudaily.model.service.ServiceRest;
+import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.MenuAdapter;
+import com.github.zzwwws.rxzhihudaily.presenter.impl.FetchFeedImpl;
+import com.github.zzwwws.rxzhihudaily.presenter.impl.RecyclerLoadingView;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by zzwwws on 2016/2/4.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerLoadingView {
 
-    private String TOPICS[] = new String[]{};
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private DrawerLayout Drawer;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private Toolbar toolbar;
+    @Bind(R.id.tool_bar)
+    Toolbar toolbar;
+    @Bind(R.id.RecyclerView)
+    RecyclerView recyclerView;
+    @Bind(R.id.DrawerLayout)
+    DrawerLayout drawerLayout;
+
+    private String topics[] = new String[]{};
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ActionBarDrawerToggle drawerToggle;
+    private FetchFeedImpl fetchImpl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        toolbar.setOnMenuItemClickListener(onMenuItemClickListener);
 
-        findViews();
+        initDrawer();
         initData();
-
-
-    }
-
-    private void findViews() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
-        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
     }
 
     private void initData() {
-        TOPICS = this.getResources().getStringArray(R.array.menu_topic_type);
+        topics = this.getResources().getStringArray(R.array.menu_topic_type);
+        adapter = new MenuAdapter(this, topics);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        toolbar.setOnMenuItemClickListener(onMenuItemClickListener);
 
-        mAdapter = new MenuAdapter(this, TOPICS);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(mAdapter);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        fetchImpl = new FetchFeedImpl();
+        fetchImpl.attachView(this);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, toolbar, R.string.open_drawer, R.string.close_drawer) {
+        testRxJava();
+    }
+
+    private void initDrawer() {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -77,43 +81,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        Drawer.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
-
-        testRxJava();
+        drawerLayout.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
     }
 
-    private void testRxJava(){
-//        String[] names = new String[]{"h,e,l,l,o","R,x,J,a,v,a","!"};
-//        Observable.from(names)
-//                .flatMap(new Func1<String, Observable<String>>() {
-//                    @Override
-//                    public Observable<String> call(String s) {
-//                        return Observable.from(s.split(","));
-//                    }
-//                })
-//                .map(new Func1<String, String>() {
-//                    @Override
-//                    public String call(String s) {
-//                        return s.toUpperCase();
-//                    }
-//                })
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<String>() {
-//                    @Override
-//                    public void call(String name) {
-//                        System.out.println(name);
-//                    }
-//                });
-
-        ServiceRest rest = ServiceRest.getInstance();
-        rest.get(this);
+    private void testRxJava() {
+        fetchImpl.loadingNew();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return true;
     }
 
@@ -138,4 +116,23 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void loadingNew(LatestFeed latestFeed) {
+        Toast.makeText(this, latestFeed.getDate(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void loadingPast() {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void showError(int layoutId) {
+
+    }
 }
