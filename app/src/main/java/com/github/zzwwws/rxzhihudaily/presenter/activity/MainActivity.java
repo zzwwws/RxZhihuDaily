@@ -2,9 +2,7 @@ package com.github.zzwwws.rxzhihudaily.presenter.activity;
 
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,12 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.zzwwws.rxzhihudaily.R;
-import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.MenuAdapter;
-import com.github.zzwwws.rxzhihudaily.presenter.adapter.StoryScrollListener;
-import com.github.zzwwws.rxzhihudaily.presenter.adapter.StoriesAdapter;
-import com.github.zzwwws.rxzhihudaily.presenter.impl.FetchFeedImpl;
-import com.github.zzwwws.rxzhihudaily.presenter.impl.RecyclerLoadingView;
+import com.github.zzwwws.rxzhihudaily.presenter.fragment.HomeFragment;
+import com.github.zzwwws.rxzhihudaily.presenter.fragment.TopicFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,27 +21,36 @@ import butterknife.ButterKnife;
 /**
  * Created by zzwwws on 2016/2/4.
  */
-public class MainActivity extends AppCompatActivity implements RecyclerLoadingView {
-
+public class MainActivity extends BaseActivity {
     @Bind(R.id.tool_bar)
     Toolbar toolbar;
     @Bind(R.id.menu_recycler)
     RecyclerView menuRecyclerView;
     @Bind(R.id.DrawerLayout)
     DrawerLayout drawerLayout;
-    @Bind(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.story_recycler)
-    RecyclerView storyRecyclerView;
 
     private String topics[] = new String[]{};
     private RecyclerView.Adapter menuAdapter;
     private LinearLayoutManager menuLayoutManager;
-
-    private StoriesAdapter storiesAdapter;
-    private LinearLayoutManager storyLayoutManager;
     private ActionBarDrawerToggle drawerToggle;
-    private FetchFeedImpl fetchImpl;
+
+    private HomeFragment homeFragment;
+    private TopicFragment topicFragment;
+
+    private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.message:
+                    break;
+                case R.id.action_search:
+                    break;
+                case R.id.action_settings:
+                    break;
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
         initDrawer();
         initData();
     }
@@ -68,34 +71,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
         menuRecyclerView.setLayoutManager(menuLayoutManager);
         toolbar.setOnMenuItemClickListener(onMenuItemClickListener);
 
-        storiesAdapter = new StoriesAdapter(this, new Feed());
-        storyRecyclerView.setHasFixedSize(true);
-        storyRecyclerView.setAdapter(storiesAdapter);
-        storyLayoutManager = new LinearLayoutManager(this);
-        storyRecyclerView.setLayoutManager(storyLayoutManager);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                fetchImpl.loadingNew();
-            }
-        });
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.ColorPrimary));
-
-        storyRecyclerView.addOnScrollListener(new StoryScrollListener(storyRecyclerView, storyLayoutManager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                fetchImpl.loadingPast(currentPage);
-            }
-
-            @Override
-            public void onScrollToNextDay(String date) {
-                toolbar.setTitle(date);
-            }
-        });
-        fetchImpl = new FetchFeedImpl();
-        fetchImpl.attachView(this);
-
-        testRxJava();
+        switchContent(null, new HomeFragment(), null);
     }
 
     private void initDrawer() {
@@ -117,10 +93,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
         drawerToggle.syncState();
     }
 
-    private void testRxJava() {
-        fetchImpl.loadingNew();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -133,50 +105,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
         return super.onOptionsItemSelected(item);
     }
 
-    private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.message:
-                    break;
-                case R.id.action_search:
-                    break;
-                case R.id.action_settings:
-                    break;
-            }
-            return false;
-        }
-    };
-
-    @Override
-    public void loadingNew(Feed feed) {
-       storiesAdapter.loadingNewStories(feed);
+    public void setToolbarTitle(String title) {
+        toolbar.setTitle(title);
     }
-
-    @Override
-    public void loadingPast(Feed feed, String date) {
-
-        storiesAdapter.loadingOldStories(feed, date);
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void showError(int layoutId) {
-
-    }
-
-    @Override
-    public void onLoadingNewComplete() {
-        swipeRefreshLayout.stopNestedScroll();
-    }
-
-    @Override
-    public void onLoadingPastComplete() {
-
-    }
-
 }

@@ -8,11 +8,11 @@ import rx.Observable;
 /**
  * Created by zzwwws on 2016/2/18.
  */
-public class LoadingNewCase extends UserCase<Feed,String> {
+public class NewStoryCase extends UserCase<Feed,String> {
 
 
     @Override
     protected Observable<Feed> interactor(String params) {
-        return ServiceRest.getInstance().fetchLatest();
+        return ServiceRest.getInstance().fetchLatestStory();
     }
 }

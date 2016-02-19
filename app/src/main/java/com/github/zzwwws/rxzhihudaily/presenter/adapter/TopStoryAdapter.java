@@ -51,8 +51,8 @@ public class TopStoryAdapter extends PagerAdapter {
                 .with(context)
                 .load(topStories.get(pos).getImage())
                 .dontAnimate()
-                .placeholder(R.drawable.ic_logo)
-                .error(R.drawable.ic_logo)
+                .placeholder(R.drawable.image_top_default)
+                .error(R.drawable.image_top_default)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.imgTopStory);
         holder.tvTopStory.setText(topStories.get(pos).getTitle());

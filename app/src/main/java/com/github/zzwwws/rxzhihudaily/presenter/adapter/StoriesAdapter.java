@@ -207,8 +207,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .with(context)
                 .load(stories.get(tPos).getImages().get(0))
                 .dontAnimate()
-                .placeholder(R.drawable.ic_logo)
-                .error(R.drawable.ic_logo)
+                .placeholder(R.drawable.image_small_default)
+                .error(R.drawable.image_small_default)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.imgStoryPic);
         holder.imgStoryMultiFlag.setVisibility(stories.get(tPos).getMultipic()?View.VISIBLE:View.GONE);

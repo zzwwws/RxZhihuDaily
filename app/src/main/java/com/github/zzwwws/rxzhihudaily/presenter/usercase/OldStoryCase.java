@@ -8,9 +8,9 @@ import rx.Observable;
 /**
  * Created by zzwwws on 2016/2/18.
  */
-public class LoadingOldCase extends UserCase<Feed, String> {
+public class OldStoryCase extends UserCase<Feed, String> {
     @Override
     protected Observable<Feed> interactor(String params) {
-        return ServiceRest.getInstance().fetchOld(params);
+        return ServiceRest.getInstance().fetchOldStory(params);
     }
 }
