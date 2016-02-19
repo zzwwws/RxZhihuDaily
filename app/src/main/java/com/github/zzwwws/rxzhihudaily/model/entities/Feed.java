@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "stories",
     "top_stories"
 })
-public class LatestFeed {
+public class Feed {
 
     @JsonProperty("date")
     private String date;

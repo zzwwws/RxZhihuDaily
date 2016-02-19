@@ -33,6 +33,8 @@ public class Story {
     private String gaPrefix;
     @JsonProperty("title")
     private String title;
+    @JsonProperty("date")
+    private String date;
     @JsonProperty("multipic")
     private Boolean multipic;
     @JsonIgnore
@@ -136,6 +138,25 @@ public class Story {
     @JsonProperty("title")
     public void setTitle(String title) {
         this.title = title;
+    }
+    /**
+     *
+     * @return
+     *     The title
+     */
+    @JsonProperty("date")
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     *
+     * @param date
+     *     The title
+     */
+    @JsonProperty("date")
+    public void setDate(String date) {
+        this.date = date;
     }
 
     /**

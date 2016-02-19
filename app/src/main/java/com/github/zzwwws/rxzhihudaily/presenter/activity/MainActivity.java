@@ -13,8 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.zzwwws.rxzhihudaily.R;
-import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
+import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.MenuAdapter;
+import com.github.zzwwws.rxzhihudaily.presenter.adapter.StoryScrollListener;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.StoriesAdapter;
 import com.github.zzwwws.rxzhihudaily.presenter.impl.FetchFeedImpl;
 import com.github.zzwwws.rxzhihudaily.presenter.impl.RecyclerLoadingView;
@@ -40,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
 
     private String topics[] = new String[]{};
     private RecyclerView.Adapter menuAdapter;
-    private RecyclerView.LayoutManager menuLayoutManager;
+    private LinearLayoutManager menuLayoutManager;
 
     private StoriesAdapter storiesAdapter;
-    private RecyclerView.LayoutManager storyLayoutManager;
+    private LinearLayoutManager storyLayoutManager;
     private ActionBarDrawerToggle drawerToggle;
     private FetchFeedImpl fetchImpl;
 
@@ -67,11 +68,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
         menuRecyclerView.setLayoutManager(menuLayoutManager);
         toolbar.setOnMenuItemClickListener(onMenuItemClickListener);
 
-        fetchImpl = new FetchFeedImpl();
-        fetchImpl.attachView(this);
-
-
-        storiesAdapter = new StoriesAdapter(this, new LatestFeed());
+        storiesAdapter = new StoriesAdapter(this, new Feed());
         storyRecyclerView.setHasFixedSize(true);
         storyRecyclerView.setAdapter(storiesAdapter);
         storyLayoutManager = new LinearLayoutManager(this);
@@ -82,6 +79,22 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
                 fetchImpl.loadingNew();
             }
         });
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.ColorPrimary));
+
+        storyRecyclerView.addOnScrollListener(new StoryScrollListener(storyRecyclerView, storyLayoutManager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                fetchImpl.loadingPast(currentPage);
+            }
+
+            @Override
+            public void onScrollToNextDay(String date) {
+                toolbar.setTitle(date);
+            }
+        });
+        fetchImpl = new FetchFeedImpl();
+        fetchImpl.attachView(this);
+
         testRxJava();
     }
 
@@ -136,13 +149,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
     };
 
     @Override
-    public void loadingNew(LatestFeed latestFeed) {
-       storiesAdapter.loadingNewStories(latestFeed);
+    public void loadingNew(Feed feed) {
+       storiesAdapter.loadingNewStories(feed);
     }
 
     @Override
-    public void loadingPast() {
+    public void loadingPast(Feed feed, String date) {
 
+        storiesAdapter.loadingOldStories(feed, date);
     }
 
     @Override
@@ -152,6 +166,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerLoadingVi
 
     @Override
     public void showError(int layoutId) {
+
+    }
+
+    @Override
+    public void onLoadingNewComplete() {
+        swipeRefreshLayout.stopNestedScroll();
+    }
+
+    @Override
+    public void onLoadingPastComplete() {
 
     }
 

@@ -7,7 +7,7 @@ public interface StoriesPresenter<T extends RecyclerLoadingView> extends Present
 
     void loadingNew();
 
-    void loadingPast();
+    void loadingPast(int page);
 
     void showLoading();
 

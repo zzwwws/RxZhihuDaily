@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.zzwwws.rxzhihudaily.R;
-import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
+import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.model.entities.Story;
 import com.github.zzwwws.rxzhihudaily.presenter.ui.widget.AutoScrollViewPager;
 import com.github.zzwwws.rxzhihudaily.presenter.ui.widget.ViewPagerCompact;
@@ -32,40 +32,51 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static final int TYPE_LIST_ITEM = 0x02;
 
     private Context context;
-    private LatestFeed latestFeed;
+    private Feed feed;
     private List<Story> stories;
 
     private List<Integer> storyHeadPos = new ArrayList<>();
 
     private TopStoryAdapter topStoryAdapter;
 
-    public StoriesAdapter(Context context, LatestFeed latestFeed) {
+    public StoriesAdapter(Context context, Feed feed) {
         this.context = context;
-        init(latestFeed);
+        init(feed);
     }
 
-    public void loadingNewStories(LatestFeed latestFeed){
-        init(latestFeed);
+    public void loadingNewStories(Feed feed){
+        init(feed);
         notifyDataSetChanged();
     }
 
-    public void loadingOldStories(LatestFeed latestFeed) {
-        List<Story> tmpStory = latestFeed.getStories();
+    public void loadingOldStories(Feed feed, String date) {
+        List<Story> tmpStory = feed.getStories();
         if (tmpStory != null && tmpStory.size() > 0) {
+            for(Story story : tmpStory){
+                story.setDate(date);
+            }
             storyHeadPos.add(this.stories.size() + 1);
             this.stories.addAll(tmpStory);
             this.notifyDataSetChanged();
         }
     }
 
-    private void init(LatestFeed latestFeed){
+    private void init(Feed feed){
         if(stories != null)stories.clear();
         if(storyHeadPos != null)storyHeadPos.clear();
-        this.latestFeed = latestFeed;
-        if (this.latestFeed != null) {
-            this.stories = this.latestFeed.getStories();
+        this.feed = feed;
+        if (this.feed != null) {
+            this.stories = this.feed.getStories();
             storyHeadPos.add(1);
         }
+    }
+
+    public List<Integer> getStoryHeadPos(){
+        return this.storyHeadPos;
+    }
+
+    public String getTitleByHeadPos(int head){
+        return feed.getStories().get(head).getDate();
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -95,7 +106,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return latestFeed == null || latestFeed.getStories() == null || latestFeed.getStories().size() == 0 ? 0 : latestFeed.getStories()
+        return feed == null || feed.getStories() == null || feed.getStories().size() == 0 ? 0 : feed.getStories()
                 .size() + 1;
     }
 
@@ -142,7 +153,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private void bindPagerData(final TopViewHolder holder) {
         if (topStoryAdapter == null) {
-            topStoryAdapter = new TopStoryAdapter(context, latestFeed.getTopStories());
+            topStoryAdapter = new TopStoryAdapter(context, feed.getTopStories());
         }
 
         AutoScrollViewPager pager = holder.topStoryPager;
@@ -154,7 +165,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         pager.setOnPageChangeListener(new ViewPagerCompact.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                setCurPage(holder, latestFeed.getTopStories().size(), position);
+                setCurPage(holder, feed.getTopStories().size(), position);
             }
         });
 
@@ -182,11 +193,11 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void bindStoryData(StoryViewHolder holder, int position) {
         int tPos = position - 1;
 
-        List<Story> stories = latestFeed.getStories();
+        List<Story> stories = feed.getStories();
         //TOP STORY TITLE
         if (storyHeadPos.contains(position)) {
             holder.tvStoryTitle.setVisibility(View.VISIBLE);
-            holder.tvStoryTitle.setText(position == 1? "今日热闻":latestFeed.getDate());
+            holder.tvStoryTitle.setText(position == 1? "今日热闻": stories.get(tPos).getDate());
         }else{
             holder.tvStoryTitle.setVisibility(View.GONE);
         }

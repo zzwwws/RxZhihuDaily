@@ -1,8 +1,10 @@
 package com.github.zzwwws.rxzhihudaily.presenter.impl;
 
 
-import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
+import com.github.zzwwws.rxzhihudaily.common.util.TimeUtil;
+import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.presenter.usercase.LoadingNewCase;
+import com.github.zzwwws.rxzhihudaily.presenter.usercase.LoadingOldCase;
 
 import rx.Subscriber;
 
@@ -11,15 +13,21 @@ import rx.Subscriber;
  */
 public class FetchFeedImpl<T extends RecyclerLoadingView> implements StoriesPresenter<T> {
 
+    Subscriber<Feed> loadingNewSub;
+    Subscriber<Feed> loadingPastSub;
     private RecyclerLoadingView recyclerLoadingView;
     private LoadingNewCase loadingNewCase;
 
-    public FetchFeedImpl(){};
+    ;
+    private LoadingOldCase loadingOldCase;
+    public FetchFeedImpl() {
+    }
 
     @Override
     public void attachView(T view) {
         this.recyclerLoadingView = view;
         loadingNewCase = new LoadingNewCase();
+        loadingOldCase = new LoadingOldCase();
     }
 
     @Override
@@ -29,12 +37,43 @@ public class FetchFeedImpl<T extends RecyclerLoadingView> implements StoriesPres
 
     @Override
     public void loadingNew() {
+        loadingNewSub = new Subscriber<Feed>() {
+            @Override
+            public void onCompleted() {
+                recyclerLoadingView.onLoadingNewComplete();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Feed feed) {
+                FetchFeedImpl.this.recyclerLoadingView.loadingNew(feed);
+            }
+        };
         loadingNewCase.subscribe(loadingNewSub, "");
     }
 
     @Override
-    public void loadingPast() {
+    public void loadingPast(final int page) {
+        loadingPastSub = new Subscriber<Feed>() {
+            @Override
+            public void onCompleted() {
+                recyclerLoadingView.onLoadingPastComplete();
+            }
 
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(Feed feed) {
+                FetchFeedImpl.this.recyclerLoadingView.loadingPast(feed, TimeUtil.getPastDateStringDisplay(page+1));
+            }
+        };
+        loadingOldCase.subscribe(loadingPastSub, TimeUtil.getPastDatetimeString(page));
     }
 
     @Override
@@ -47,37 +86,4 @@ public class FetchFeedImpl<T extends RecyclerLoadingView> implements StoriesPres
         recyclerLoadingView.showError(layoutId);
     }
 
-    Subscriber<LatestFeed> loadingNewSub = new Subscriber<LatestFeed>() {
-        @Override
-        public void onCompleted() {
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-
-        }
-
-        @Override
-        public void onNext(LatestFeed latestFeed) {
-            FetchFeedImpl.this.recyclerLoadingView.loadingNew(latestFeed);
-        }
-    };
-
-    Subscriber<LatestFeed> loadingPastSub = new Subscriber<LatestFeed>() {
-        @Override
-        public void onCompleted() {
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-
-        }
-
-        @Override
-        public void onNext(LatestFeed latestFeed) {
-
-        }
-    };
 }

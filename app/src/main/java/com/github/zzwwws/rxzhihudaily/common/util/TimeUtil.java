@@ -87,6 +87,22 @@ public class TimeUtil {
         return FULL_SDF.format(date);
     }
 
+    public static String getNowDatetimeSimply(){
+        return FULL_SDF.format(new Date()).substring(0, 8);
+    }
+
+    public static String getPastDatetimeString(int day){
+        long mis = getNow_millisecond() - day * 24 * 3600 * 1000;
+        return FULL_SDF.format(new Date(mis)).substring(0, 8);
+    }
+
+    public static String getPastDateStringDisplay(int day){
+        long mis = getNow_millisecond() - day * 24 * 3600 * 1000;
+        String fully =  FULL_SDF.format(new Date(mis));
+        String mmdd = fully.substring(4,6)+"月"+fully.substring(6,8)+"日";
+        String weekDay = getWeekOfDate(new Date(mis));
+        return mmdd +" "+weekDay;
+    }
     public static String getBeijingNowTime(String format) {
         TimeZone timezone = TimeZone.getTimeZone("Asia/Shanghai");
 

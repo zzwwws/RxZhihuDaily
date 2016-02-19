@@ -1,6 +1,6 @@
 package com.github.zzwwws.rxzhihudaily.model.service;
 
-import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
+import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -27,12 +27,12 @@ public class ServiceRest {
         return SingletonHolder.instance;
     }
 
-    public Observable<LatestFeed> fetchLatest() {
+    public Observable<Feed> fetchLatest() {
         return serviceApi.fetchLatest();
     }
 
-    public Observable<LatestFeed> fetchOld(){
-        return serviceApi.fetchLatest();
+    public Observable<Feed> fetchOld(String date){
+        return serviceApi.fetchPast(date);
     }
 
     private static class SingletonHolder {

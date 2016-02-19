@@ -1,13 +1,10 @@
 package com.github.zzwwws.rxzhihudaily.model.service;
 
-import com.github.zzwwws.rxzhihudaily.model.entities.LatestFeed;
+import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -15,5 +12,9 @@ import rx.Observable;
  */
 public interface FetchService {
     @GET("api/4/stories/latest")
-    Observable<LatestFeed> fetchLatest();
+    Observable<Feed> fetchLatest();
+
+    @GET("api/4/news/before/{date}")
+    Observable<Feed> fetchPast(@Path("date") String date);
+
 }
