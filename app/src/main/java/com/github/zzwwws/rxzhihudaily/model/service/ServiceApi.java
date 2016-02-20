@@ -25,9 +25,9 @@ public interface ServiceApi {
     Observable<TopicDetail> getPastTopic(@Path("topicId") String topicId, @Path("storyId") String storyId);
 
     @GET("4/stories/latest")
-    Observable<Feed> fetchLatest();
+    Observable<Feed> fetchLatestStory();
 
     @GET("4/news/before/{date}")
-    Observable<Feed> fetchPast(@Path("date") String date);
+    Observable<Feed> fetchPastStory(@Path("date") String date);
 
 }
