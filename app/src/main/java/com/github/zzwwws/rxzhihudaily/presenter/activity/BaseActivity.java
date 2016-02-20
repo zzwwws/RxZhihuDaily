@@ -15,7 +15,6 @@ public class BaseActivity extends AppCompatActivity{
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (from != null)
             transaction.remove(from);
-
         if (!to.isAdded()) {
             to.setArguments(bundle);
             transaction.add(to.getFragmentId(), to);

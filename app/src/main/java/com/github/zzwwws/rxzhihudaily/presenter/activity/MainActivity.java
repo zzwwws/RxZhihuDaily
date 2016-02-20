@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.model.entities.Other;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.MenuAdapter;
+import com.github.zzwwws.rxzhihudaily.presenter.fragment.BaseFragment;
 import com.github.zzwwws.rxzhihudaily.presenter.fragment.HomeFragment;
 import com.github.zzwwws.rxzhihudaily.presenter.fragment.TopicFragment;
 import com.github.zzwwws.rxzhihudaily.presenter.impl.MenuImpl;
@@ -39,6 +40,8 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
     @Bind(R.id.DrawerLayout)
     DrawerLayout drawerLayout;
 
+    private final int HOME_PAGE = 0x00;
+    private final int TOPIC_PAGE = 0x01;
     private String topics[] = new String[]{};
     private MenuAdapter menuAdapter;
     private LinearLayoutManager menuLayoutManager;
@@ -48,6 +51,7 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
     private TopicFragment topicFragment;
     
     private MenuImpl menuImpl;
+    private int currentPage = HOME_PAGE;
 
     private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
         @Override
@@ -76,8 +80,11 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
 
     private void initData() {
 
+        menuImpl = new MenuImpl();
+        menuImpl.attachView(this);
+
         topics = this.getResources().getStringArray(R.array.menu_topic_type);
-        menuAdapter = new MenuAdapter(this, new ArrayList<Other>());
+        menuAdapter = new MenuAdapter(this, menuImpl.getDefaultTopicList(topics));
         menuAdapter.setOnItemClickListener(this);
         menuRecyclerView.setHasFixedSize(true);
         menuRecyclerView.setAdapter(menuAdapter);
@@ -90,10 +97,7 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
             homeFragment = new HomeFragment();
         }
         switchContent(topicFragment, homeFragment, null);
-        
-        menuImpl = new MenuImpl();
-        menuImpl.attachView(this);
-        
+
         menuImpl.loadTopics();
     }
 
@@ -159,18 +163,30 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
                 break;
             default:
                 if(v instanceof TextView){
-                    String topicId = (String)v.getTag();
+                    Other topic= (Other)v.getTag();
                     if(topicFragment == null){
                         topicFragment = new TopicFragment();
                     }
-                    topicFragment.setTopicId(topicId);
+                    topicFragment.setTopicId(topic.getId()+"");
                     drawerLayout.closeDrawers();
-                    switchContent(homeFragment, topicFragment, null);
-                    toolbar.setTitle("topic");
+                    toolbar.setTitle(topic.getName());
+
+                    //replace or transaction
+                    if(currentPage == HOME_PAGE){
+                        switchContent(homeFragment, topicFragment, null);
+                    }else {
+                        topicFragment.replace(topic.getId()+"");
+                    }
                 }else if(v instanceof ImageView){
                     // TODO: 2016/2/20 add favorite
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void switchContent(BaseFragment from, BaseFragment to, Bundle bundle) {
+        super.switchContent(from, to, bundle);
+        currentPage = from == homeFragment?TOPIC_PAGE:HOME_PAGE;
     }
 }

@@ -131,4 +131,8 @@ public class TopicFragment extends BaseFragment implements TopicRecyclerView {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+    public void replace(String id){
+        topicsImpl.loadingNew(id);
+    }
 }

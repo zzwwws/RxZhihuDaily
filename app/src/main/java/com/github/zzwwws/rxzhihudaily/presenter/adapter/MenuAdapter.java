@@ -68,7 +68,7 @@ public class MenuAdapter extends BaseRecyclerAdapter<RecyclerView.ViewHolder> {
             MenuViewHolder menuViewHolder = (MenuViewHolder) holder;
             menuViewHolder.rowText.setText(mTopics.get(position - 1).getName());
             menuViewHolder.rowIcon.setImageResource(R.drawable.menu_follow);
-            menuViewHolder.rowText.setTag(mTopics.get(position - 1).getId() + "");
+            menuViewHolder.rowText.setTag(mTopics.get(position - 1));
         }
     }
 
