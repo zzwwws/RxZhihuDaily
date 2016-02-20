@@ -6,33 +6,48 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.zzwwws.rxzhihudaily.R;
+import com.github.zzwwws.rxzhihudaily.model.entities.Other;
+import com.github.zzwwws.rxzhihudaily.presenter.infr.RecyclerOnItemClickListener;
+
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by zzwwws on 2016/2/15.
  */
-public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
+public class MenuAdapter extends BaseRecyclerAdapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_HEADER = 0x01;
     private static final int TYPE_TOPICS = 0x02;
 
     private Context context;
-    private String[] mTopics;
+    private List<Other> mTopics;
 
-    public MenuAdapter(Context context, String[] topics){
+    public MenuAdapter(Context context, List<Other> topics) {
         this.context = context;
         this.mTopics = topics;
     }
 
+    public void initData(List<Other> topics) {
+        this.mTopics = topics;
+        notifyDataSetChanged();
+    }
+
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == TYPE_TOPICS) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rows, parent, false);
 
-            ViewHolder vhItem = new ViewHolder(v, viewType);
+            RecyclerView.ViewHolder vhItem = new MenuViewHolder(v, listener);
 
             return vhItem;
 
@@ -40,7 +55,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header, parent, false);
 
-            ViewHolder vhHeader = new ViewHolder(v, viewType);
+            RecyclerView.ViewHolder vhHeader = new HeadViewHolder(v, listener);
 
             return vhHeader;
         }
@@ -48,12 +63,15 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        if (holder.holderId == 1) {
-            holder.textView.setText(mTopics[position - 1]);
-            holder.imageView.setImageResource(R.drawable.menu_follow);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof MenuViewHolder) {
+            MenuViewHolder menuViewHolder = (MenuViewHolder) holder;
+            menuViewHolder.rowText.setText(mTopics.get(position - 1).getName());
+            menuViewHolder.rowIcon.setImageResource(R.drawable.menu_follow);
+            menuViewHolder.rowText.setTag(mTopics.get(position - 1).getId() + "");
         }
     }
+
     @Override
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
@@ -64,27 +82,64 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mTopics.length + 1;
+        return mTopics.size() + 1;
     }
 
     private boolean isPositionHeader(int position) {
         return position == 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    @Override
+    public void setOnItemClickListener(RecyclerOnItemClickListener listener) {
+        this.listener = listener;
+    }
 
-        private int holderId;
-        private TextView textView;
-        private ImageView imageView;
+    public static class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ViewHolder(View itemView, int viewType){
+        @Bind(R.id.rowText)
+        TextView rowText;
+        @Bind(R.id.rowIcon)
+        ImageView rowIcon;
+        private RecyclerOnItemClickListener listener;
+
+        public MenuViewHolder(View itemView, RecyclerOnItemClickListener listener) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
+            this.listener = listener;
+        }
 
-            if(viewType == TYPE_TOPICS){
-                textView = (TextView) itemView.findViewById(R.id.rowText);
-                imageView = (ImageView) itemView.findViewById(R.id.rowIcon);
-                holderId = 1;
+        @OnClick({R.id.rowText, R.id.rowIcon})
+        public void onClick(View view) {
+            if (this.listener != null) {
+                this.listener.onItemClickListener(view, getAdapterPosition());
             }
+        }
+    }
+
+    public static class HeadViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        @Bind(R.id.circleView)
+        CircleImageView circleView;
+        @Bind(R.id.tv_head_name)
+        TextView tvHeadName;
+        @Bind(R.id.tv_head_collect)
+        TextView tvHeadCollect;
+        @Bind(R.id.tv_head_download)
+        TextView tvHeadDownload;
+        @Bind(R.id.lly_header_home)
+        LinearLayout llyHeaderHome;
+
+        private RecyclerOnItemClickListener listener;
+
+        public HeadViewHolder(View itemView, RecyclerOnItemClickListener listener) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            this.listener = listener;
+        }
+
+        @OnClick({R.id.circleView, R.id.tv_head_name, R.id.tv_head_collect, R.id.tv_head_download, R.id.lly_header_home})
+        public void onClick(View view) {
+            listener.onItemClickListener(view, 0);
         }
     }
 }

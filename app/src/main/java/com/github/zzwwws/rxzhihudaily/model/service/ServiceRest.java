@@ -8,6 +8,7 @@ import com.github.zzwwws.rxzhihudaily.common.util.LogUtil;
 import com.github.zzwwws.rxzhihudaily.common.util.NetworkUtil;
 import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.model.entities.TopicDetail;
+import com.github.zzwwws.rxzhihudaily.model.entities.Topics;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,8 @@ public class ServiceRest {
     public static ServiceRest getInstance() {
         return SingletonHolder.instance;
     }
+
+    public Observable<Topics> fetchTopicList(){return serviceApi.getTopics();}
 
     public Observable<Feed> fetchLatestStory() {
         return serviceApi.fetchLatestStory();

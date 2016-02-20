@@ -25,9 +25,9 @@ import butterknife.ButterKnife;
 public class TopicFragment extends BaseFragment implements TopicRecyclerView {
 
     protected View rootView;
-    @Bind(R.id.story_recycler)
+    @Bind(R.id.topic_recycler)
     RecyclerView topicRecyclerView;
-    @Bind(R.id.swipe_refresh_layout)
+    @Bind(R.id.topic_swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
     private LinearLayoutManager topicLayoutManager;
@@ -39,7 +39,8 @@ public class TopicFragment extends BaseFragment implements TopicRecyclerView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.topic_fragment_layout, container, false);
-        ButterKnife.bind(this, super.onCreateView(inflater, container, savedInstanceState));
+        ButterKnife.bind(this, rootView);
+
         return rootView;
     }
 
@@ -51,7 +52,7 @@ public class TopicFragment extends BaseFragment implements TopicRecyclerView {
     }
 
     public TopicFragment() {
-        setFragmentId(R.layout.topic_fragment_layout);
+        setFragmentId(R.id.topic_container);
     }
 
     public void setTopicId(String topicId){
@@ -100,7 +101,7 @@ public class TopicFragment extends BaseFragment implements TopicRecyclerView {
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override

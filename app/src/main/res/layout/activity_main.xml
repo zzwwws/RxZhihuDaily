@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="7dp">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -15,17 +15,19 @@
             android:id="@+id/tool_bar"
             layout="@layout/tool_bar"></include>
         <LinearLayout
+            android:layout_marginTop="?attr/actionBarSize"
             android:id="@+id/home_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="?attr/actionBarSize"
             android:id="@+id/topic_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/menu_recycler"

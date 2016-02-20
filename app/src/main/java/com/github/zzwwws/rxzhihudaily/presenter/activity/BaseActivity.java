@@ -14,7 +14,7 @@ public class BaseActivity extends AppCompatActivity{
     protected void switchContent(BaseFragment from, BaseFragment to, Bundle bundle) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (from != null)
-            transaction.hide(from);
+            transaction.remove(from);
 
         if (!to.isAdded()) {
             to.setArguments(bundle);
@@ -26,7 +26,7 @@ public class BaseActivity extends AppCompatActivity{
             transaction.show(to);
         }
         try {
-            transaction.commitAllowingStateLoss();
+            transaction.commit();
         } catch (Exception e) {
 
         }

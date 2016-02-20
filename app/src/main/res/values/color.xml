@@ -26,4 +26,7 @@
     <color name="color_alpha_15_ffffff">#26ffffff</color>
     <color name="color_alpha_10_ffffff">#19ffffff</color>
     <color name="color_alpha_5_ffffff">#0Cffffff</color>
+
+    <color name="color_topic_chief_editor">#6F6F6F</color>
+    <color name="color_story_has_viewed">#777777</color>
 </resources>

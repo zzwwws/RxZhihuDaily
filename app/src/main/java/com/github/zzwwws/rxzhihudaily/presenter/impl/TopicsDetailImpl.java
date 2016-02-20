@@ -10,7 +10,7 @@ import rx.Subscriber;
 /**
  * Created by zzwwws on 2016/2/19.
  */
-public class TopicsDetailImpl<T extends TopicRecyclerView> implements TopicsPresenter<T> {
+public class TopicsDetailImpl implements TopicsPresenter<TopicRecyclerView> {
 
     Subscriber<TopicDetail> loadingNewSub;
     Subscriber<TopicDetail> loadingPastSub;
@@ -76,7 +76,7 @@ public class TopicsDetailImpl<T extends TopicRecyclerView> implements TopicsPres
     }
 
     @Override
-    public void attachView(T view) {
+    public void attachView(TopicRecyclerView view) {
         this.topicRecyclerView = view;
         newTopicDetailCase = new NewTopicDetailCase();
         oldTopicDetailCase = new OldTopicDetailCase();

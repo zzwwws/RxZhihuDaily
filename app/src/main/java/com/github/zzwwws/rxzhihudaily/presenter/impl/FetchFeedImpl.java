@@ -12,7 +12,7 @@ import rx.Subscriber;
 /**
  * Created by zzwwws on 2016/2/17.
  */
-public class FetchFeedImpl<T extends HomeRecyclerView> implements StoriesPresenter<T> {
+public class FetchFeedImpl implements StoriesPresenter<HomeRecyclerView> {
 
     Subscriber<Feed> loadingNewSub;
     Subscriber<Feed> loadingPastSub;
@@ -24,7 +24,7 @@ public class FetchFeedImpl<T extends HomeRecyclerView> implements StoriesPresent
     }
 
     @Override
-    public void attachView(T view) {
+    public void attachView(HomeRecyclerView view) {
         this.homeRecyclerView = view;
         newStoryCase = new NewStoryCase();
         oldStoryCase = new OldStoryCase();
