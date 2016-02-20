@@ -135,7 +135,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             chiefEditorAdapter = new ChiefEditorAdapter(context, topicDetail.getEditors());
         }
         holder.horizontalListView.setAdapter(chiefEditorAdapter);
-        chiefEditorAdapter.notifyDataSetChanged();
+        chiefEditorAdapter.setData(topicDetail.getEditors());
 
         holder.horizontalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

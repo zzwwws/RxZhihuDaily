@@ -1,6 +1,9 @@
 package com.github.zzwwws.rxzhihudaily.presenter.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.model.entities.Editor;
 
@@ -30,6 +34,11 @@ public class ChiefEditorAdapter extends BaseAdapter {
         this.context = context;
         this.editors = editors;
         inflater = LayoutInflater.from(context);
+    }
+
+    public void setData(List<Editor> editors) {
+        this.editors = editors;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -58,16 +67,22 @@ public class ChiefEditorAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (holder != null) {
-            holder.imgChiefEditorItem.setTag(editors.get(position).getUrl());
+        final ViewHolder Hohholder = holder;
+        if (Hohholder != null) {
             Glide
                     .with(context)
                     .load(editors.get(position).getAvatar())
-                    .dontAnimate()
-                    .placeholder(R.drawable.comment_avatar)
-                    .error(R.drawable.comment_avatar)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .into(holder.imgChiefEditorItem);
+                    .asBitmap()
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(Hohholder.imgChiefEditorItem) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            Hohholder.imgChiefEditorItem.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
         }
         return convertView;
     }

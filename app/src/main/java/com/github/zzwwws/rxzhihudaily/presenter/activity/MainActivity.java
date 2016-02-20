@@ -12,8 +12,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.zzwwws.rxzhihudaily.R;
+import com.github.zzwwws.rxzhihudaily.common.util.ToastUtil;
 import com.github.zzwwws.rxzhihudaily.model.entities.Other;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.MenuAdapter;
 import com.github.zzwwws.rxzhihudaily.presenter.fragment.BaseFragment;
@@ -23,7 +25,6 @@ import com.github.zzwwws.rxzhihudaily.presenter.impl.MenuImpl;
 import com.github.zzwwws.rxzhihudaily.presenter.infr.MenuRecyclerView;
 import com.github.zzwwws.rxzhihudaily.presenter.infr.RecyclerOnItemClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -52,21 +53,6 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
     
     private MenuImpl menuImpl;
     private int currentPage = HOME_PAGE;
-
-    private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.message:
-                    break;
-                case R.id.action_search:
-                    break;
-                case R.id.action_settings:
-                    break;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +108,15 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(this.menu != null){
+            this.menu.clear();
+        }
+        this.menu = menu;
+        if(currentPage == HOME_PAGE){
+            getMenuInflater().inflate(R.menu.menu_main, this.menu);
+        }else{
+            getMenuInflater().inflate(R.menu.menu_topic, this.menu);
+        }
         return true;
     }
 
@@ -160,6 +154,7 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
                 }
                 drawerLayout.closeDrawers();
                 switchContent(topicFragment, homeFragment, null);
+                switchToolbarTheme(currentPage, getString(R.string.homepage));
                 break;
             default:
                 if(v instanceof TextView){
@@ -167,9 +162,8 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
                     if(topicFragment == null){
                         topicFragment = new TopicFragment();
                     }
-                    topicFragment.setTopicId(topic.getId()+"");
+                    topicFragment.setTopicId(topic.getId() + "");
                     drawerLayout.closeDrawers();
-                    toolbar.setTitle(topic.getName());
 
                     //replace or transaction
                     if(currentPage == HOME_PAGE){
@@ -177,6 +171,7 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
                     }else {
                         topicFragment.replace(topic.getId()+"");
                     }
+                    switchToolbarTheme(currentPage, topic.getName());
                 }else if(v instanceof ImageView){
                     // TODO: 2016/2/20 add favorite
                 }
@@ -189,4 +184,30 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
         super.switchContent(from, to, bundle);
         currentPage = from == homeFragment?TOPIC_PAGE:HOME_PAGE;
     }
+
+    private void switchToolbarTheme(int currentPage, String name){
+        toolbar.setTitle(name);
+        invalidateOptionsMenu();
+    }
+
+    private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.message:
+                    ToastUtil.showToast(MainActivity.this,"message");
+                    break;
+                case R.id.action_search:
+                    ToastUtil.showToast(MainActivity.this,"action_search");
+                    break;
+                case R.id.action_settings:
+                    ToastUtil.showToast(MainActivity.this,"action_settings");
+                    break;
+                case R.id.attention:
+                    ToastUtil.showToast(MainActivity.this,"attention");
+                    break;
+            }
+            return false;
+        }
+    };
 }

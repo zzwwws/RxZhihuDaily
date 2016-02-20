@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:horizontal="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="15dp"
+    android:paddingBottom="5dp"
     android:orientation="horizontal"
     >
     <TextView
-        android:paddingTop="15dp"
-        android:paddingBottom="5dp"
+        android:layout_marginTop="10dp"
         android:paddingLeft="10dp"
         android:textColor="@color/color_topic_chief_editor"
         android:text="@string/chief_editor"
@@ -17,6 +19,7 @@
         android:layout_marginLeft="20dp"
         android:id="@+id/horizontal_list_view"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
+        android:layout_height="36dp"
+        horizontal:dividerWidth="10dp"
         ></com.github.zzwwws.rxzhihudaily.presenter.ui.view.HorizontalListView>
 </LinearLayout>
