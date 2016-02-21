@@ -1,6 +1,6 @@
 package com.github.zzwwws.rxzhihudaily.presenter.infr;
 
-import com.github.zzwwws.rxzhihudaily.model.entities.Other;
+import com.github.zzwwws.rxzhihudaily.model.entities.TopicWrapper;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface MenuRecyclerView {
 
-    void bindTopics(List<Other> topics);
+    void bindTopics(List<TopicWrapper> topics);
 
     void downLoadOffLine();
 

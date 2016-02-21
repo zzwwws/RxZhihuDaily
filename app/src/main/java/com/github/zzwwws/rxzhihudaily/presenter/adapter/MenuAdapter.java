@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.zzwwws.rxzhihudaily.R;
-import com.github.zzwwws.rxzhihudaily.model.entities.Other;
+import com.github.zzwwws.rxzhihudaily.model.entities.TopicWrapper;
 import com.github.zzwwws.rxzhihudaily.presenter.infr.RecyclerOnItemClickListener;
 
 import java.util.List;
@@ -29,14 +29,14 @@ public class MenuAdapter extends BaseRecyclerAdapter<RecyclerView.ViewHolder> {
     private static final int TYPE_TOPICS = 0x02;
 
     private Context context;
-    private List<Other> mTopics;
+    private List<TopicWrapper> mTopics;
 
-    public MenuAdapter(Context context, List<Other> topics) {
+    public MenuAdapter(Context context, List<TopicWrapper> topics) {
         this.context = context;
         this.mTopics = topics;
     }
 
-    public void initData(List<Other> topics) {
+    public void initData(List<TopicWrapper> topics) {
         this.mTopics = topics;
         notifyDataSetChanged();
     }

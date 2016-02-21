@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "limit",
     "subscribed",
-    "others"
+    "other"
 })
 public class Topics {
 
@@ -24,8 +24,8 @@ public class Topics {
     private Integer limit;
     @JsonProperty("subscribed")
     private List<Object> subscribed = new ArrayList<Object>();
-    @JsonProperty("others")
-    private List<Other> others = new ArrayList<Other>();
+    @JsonProperty("other")
+    private List<TopicWrapper> topicWrappers = new ArrayList<TopicWrapper>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -72,21 +72,21 @@ public class Topics {
     /**
      * 
      * @return
-     *     The others
+     *     The topicWrappers
      */
-    @JsonProperty("others")
-    public List<Other> getOthers() {
-        return others;
+    @JsonProperty("other")
+    public List<TopicWrapper> getTopicWrappers() {
+        return topicWrappers;
     }
 
     /**
      * 
-     * @param others
-     *     The others
+     * @param topicWrappers
+     *     The topicWrappers
      */
-    @JsonProperty("others")
-    public void setOthers(List<Other> others) {
-        this.others = others;
+    @JsonProperty("other")
+    public void setTopicWrappers(List<TopicWrapper> topicWrappers) {
+        this.topicWrappers = topicWrappers;
     }
 
     @JsonAnyGetter

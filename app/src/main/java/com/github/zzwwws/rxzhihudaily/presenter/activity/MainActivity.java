@@ -10,13 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.common.util.ToastUtil;
-import com.github.zzwwws.rxzhihudaily.model.entities.Other;
+import com.github.zzwwws.rxzhihudaily.model.entities.TopicWrapper;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.MenuAdapter;
 import com.github.zzwwws.rxzhihudaily.presenter.fragment.BaseFragment;
 import com.github.zzwwws.rxzhihudaily.presenter.fragment.HomeFragment;
@@ -131,7 +129,7 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
     }
 
     @Override
-    public void bindTopics(List<Other> topics) {
+    public void bindTopics(List<TopicWrapper> topics) {
         menuAdapter.initData(topics);
     }
 
@@ -158,7 +156,7 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
                 break;
             default:
                 if(v instanceof TextView){
-                    Other topic= (Other)v.getTag();
+                    TopicWrapper topic= (TopicWrapper)v.getTag();
                     if(topicFragment == null){
                         topicFragment = new TopicFragment();
                     }

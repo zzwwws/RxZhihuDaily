@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "id",
     "name"
 })
-public class Other {
+public class TopicWrapper {
 
     @JsonProperty("color")
     private Integer color;

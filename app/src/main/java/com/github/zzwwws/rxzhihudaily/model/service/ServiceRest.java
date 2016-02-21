@@ -6,7 +6,10 @@ import com.github.zzwwws.rxzhihudaily.common.AppConfig;
 import com.github.zzwwws.rxzhihudaily.common.BaseApplication;
 import com.github.zzwwws.rxzhihudaily.common.util.LogUtil;
 import com.github.zzwwws.rxzhihudaily.common.util.NetworkUtil;
+import com.github.zzwwws.rxzhihudaily.model.entities.Comment;
 import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
+import com.github.zzwwws.rxzhihudaily.model.entities.StartImage;
+import com.github.zzwwws.rxzhihudaily.model.entities.StoryExtraInfo;
 import com.github.zzwwws.rxzhihudaily.model.entities.TopicDetail;
 import com.github.zzwwws.rxzhihudaily.model.entities.Topics;
 
@@ -45,6 +48,22 @@ public class ServiceRest {
 
     public static ServiceRest getInstance() {
         return SingletonHolder.instance;
+    }
+
+    public Observable<StartImage> getStartImage(String density){
+        return serviceApi.getStartImage(density);
+    }
+
+    public Observable<StoryExtraInfo> getStoryExtraInfo(String id){
+        return serviceApi.getStoryExtraInfo(id);
+    }
+
+    public Observable<Comment> getShortComments(String id){
+        return serviceApi.getStoryShortComments(id);
+    }
+
+    public Observable<Comment> getLongComments(String id){
+        return serviceApi.getStoryLongComments(id);
     }
 
     public Observable<Topics> fetchTopicList(){return serviceApi.getTopics();}

@@ -1,7 +1,6 @@
 package com.github.zzwwws.rxzhihudaily.presenter.impl;
 
-import com.github.zzwwws.rxzhihudaily.model.entities.Other;
-import com.github.zzwwws.rxzhihudaily.model.entities.TopicDetail;
+import com.github.zzwwws.rxzhihudaily.model.entities.TopicWrapper;
 import com.github.zzwwws.rxzhihudaily.model.entities.Topics;
 import com.github.zzwwws.rxzhihudaily.presenter.infr.MenuRecyclerView;
 import com.github.zzwwws.rxzhihudaily.presenter.usercase.LoadTopicsCase;
@@ -46,7 +45,7 @@ public class MenuImpl implements MenuPresenter<MenuRecyclerView> {
 
             @Override
             public void onNext(Topics topics) {
-                menuRecyclerView.bindTopics(topics.getOthers());
+                menuRecyclerView.bindTopics(topics.getTopicWrappers());
             }
         };
         loadTopicsCase.subscribe(loadSubscribe, "");
@@ -62,10 +61,10 @@ public class MenuImpl implements MenuPresenter<MenuRecyclerView> {
 
     }
 
-    public List<Other> getDefaultTopicList(String[] topics){
-        List<Other> topicList = new ArrayList<>();
+    public List<TopicWrapper> getDefaultTopicList(String[] topics){
+        List<TopicWrapper> topicList = new ArrayList<>();
         for(String topicName : topics){
-            Other topic = new Other();
+            TopicWrapper topic = new TopicWrapper();
             topic.setName(topicName);
             topicList.add(topic);
         }
