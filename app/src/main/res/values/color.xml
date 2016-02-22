@@ -4,6 +4,7 @@
     <color name="white">#FFFFFF</color>
     <color name="ColorPrimary">#00A2ED</color>
     <color name="color_f0f0f0">#F0F0F0</color>
+    <color name="light_toolbar">@android:color/holo_blue_dark</color>
 
     <color name="color_alpha_90_1a1a1a">#E51a1a1a</color>
     <color name="color_alpha_90_203045">#E5203045</color>

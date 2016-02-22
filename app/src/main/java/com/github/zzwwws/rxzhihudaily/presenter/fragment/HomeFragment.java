@@ -1,18 +1,22 @@
 package com.github.zzwwws.rxzhihudaily.presenter.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
+import com.github.zzwwws.rxzhihudaily.presenter.activity.DetailActivity;
 import com.github.zzwwws.rxzhihudaily.presenter.activity.MainActivity;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.StoriesAdapter;
+import com.github.zzwwws.rxzhihudaily.presenter.infr.RecyclerOnItemClickListener;
 import com.github.zzwwws.rxzhihudaily.presenter.infr.StoryScrollListener;
 import com.github.zzwwws.rxzhihudaily.presenter.impl.FetchFeedImpl;
 import com.github.zzwwws.rxzhihudaily.presenter.infr.HomeRecyclerView;
@@ -23,7 +27,7 @@ import butterknife.ButterKnife;
 /**
  * Created by zzwwws on 2016/2/19.
  */
-public class HomeFragment extends BaseFragment implements HomeRecyclerView {
+public class HomeFragment extends BaseFragment implements HomeRecyclerView, RecyclerOnItemClickListener {
 
     protected View rootView;
     @Bind(R.id.story_recycler)
@@ -80,6 +84,7 @@ public class HomeFragment extends BaseFragment implements HomeRecyclerView {
                 ((MainActivity) getActivity()).setToolbarTitle(date);
             }
         });
+        storiesAdapter.setOnItemClickListener(this);
         fetchImpl = new FetchFeedImpl();
         fetchImpl.attachView(this);
 
@@ -127,5 +132,19 @@ public class HomeFragment extends BaseFragment implements HomeRecyclerView {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onItemClickListener(View v, int pos) {
+
+    }
+
+    @Override
+    public void onItemClickListener(View v, String id) {
+        if(!TextUtils.isEmpty(id)){
+            Intent intent = new Intent(getActivity(), DetailActivity.class);
+            intent.putExtra("id", id);
+            getActivity().startActivity(intent);
+        }
     }
 }

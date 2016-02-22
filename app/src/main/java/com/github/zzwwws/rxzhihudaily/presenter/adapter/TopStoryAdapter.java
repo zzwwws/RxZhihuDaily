@@ -12,23 +12,30 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.model.entities.TopStory;
+import com.github.zzwwws.rxzhihudaily.presenter.infr.RecyclerOnItemClickListener;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by zzwwws on 2016/2/18.
  */
-public class TopStoryAdapter extends PagerAdapter {
+public class TopStoryAdapter extends PagerAdapter{
 
+    private RecyclerOnItemClickListener listener;
     private Context context;
     private List<TopStory> topStories;
 
     public TopStoryAdapter(Context context, List<TopStory> topStories) {
         this.context = context;
         this.topStories = topStories;
+    }
+
+    public void setOnItemClickListener(RecyclerOnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -46,7 +53,7 @@ public class TopStoryAdapter extends PagerAdapter {
         return convertView;
     }
 
-    private void bindData(ViewHolder holder, int pos){
+    private void bindData(final ViewHolder holder, final int pos) {
         Glide
                 .with(context)
                 .load(topStories.get(pos).getImage())
@@ -56,7 +63,14 @@ public class TopStoryAdapter extends PagerAdapter {
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.imgTopStory);
         holder.tvTopStory.setText(topStories.get(pos).getTitle());
+        holder.getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClickListener(holder.imgTopStory, topStories.get(pos).getId()+"");
+            }
+        });
     }
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         removeFromParentView((View) object);
@@ -82,9 +96,15 @@ public class TopStoryAdapter extends PagerAdapter {
         ImageView imgTopStory;
         @Bind(R.id.tv_top_story)
         TextView tvTopStory;
+        private View view;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             ButterKnife.bind(this, view);
+            this.view = view;
+        }
+
+        public View getView(){
+            return this.view;
         }
     }
 }

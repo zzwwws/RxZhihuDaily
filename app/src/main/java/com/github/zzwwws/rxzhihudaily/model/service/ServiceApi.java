@@ -4,6 +4,7 @@ import com.github.zzwwws.rxzhihudaily.model.entities.Comment;
 import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.model.entities.StartImage;
 import com.github.zzwwws.rxzhihudaily.model.entities.Story;
+import com.github.zzwwws.rxzhihudaily.model.entities.StoryDetail;
 import com.github.zzwwws.rxzhihudaily.model.entities.StoryExtraInfo;
 import com.github.zzwwws.rxzhihudaily.model.entities.TopicDetail;
 import com.github.zzwwws.rxzhihudaily.model.entities.Topics;
@@ -35,6 +36,9 @@ public interface ServiceApi {
 
     @GET("4/news/before/{date}")
     Observable<Feed> fetchPastStory(@Path("date") String date);
+
+    @GET("4/news/{id}")
+    Observable<StoryDetail> getStoryDetail(@Path("id") String id);
 
     @GET("4/story-extra/{id}")
     Observable<StoryExtraInfo> getStoryExtraInfo(@Path("id") String id);

@@ -9,6 +9,7 @@ import com.github.zzwwws.rxzhihudaily.common.util.NetworkUtil;
 import com.github.zzwwws.rxzhihudaily.model.entities.Comment;
 import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.model.entities.StartImage;
+import com.github.zzwwws.rxzhihudaily.model.entities.StoryDetail;
 import com.github.zzwwws.rxzhihudaily.model.entities.StoryExtraInfo;
 import com.github.zzwwws.rxzhihudaily.model.entities.TopicDetail;
 import com.github.zzwwws.rxzhihudaily.model.entities.Topics;
@@ -52,6 +53,10 @@ public class ServiceRest {
 
     public Observable<StartImage> getStartImage(String density){
         return serviceApi.getStartImage(density);
+    }
+
+    public Observable<StoryDetail> getStoryDetail(String id){
+        return serviceApi.getStoryDetail(id);
     }
 
     public Observable<StoryExtraInfo> getStoryExtraInfo(String id){

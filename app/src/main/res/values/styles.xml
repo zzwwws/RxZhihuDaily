@@ -12,6 +12,10 @@
         <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
     </style>
 
+    <style name="MyToolbarTextStyle" parent="@android:style/TextAppearance.DeviceDefault">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_16</item>

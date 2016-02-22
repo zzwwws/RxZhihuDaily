@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/share"
+        android:title="@string/message"
+        app:showAsAction="always"/>
+    <item android:id="@+id/favorite"
+        android:icon="@drawable/favorites"
+        android:title="@string/favorite"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/comment"
+        android:icon="@drawable/comment"
+        android:title="@string/comment"
+        app:showAsAction="always" />
+    <item android:id="@+id/praised"
+        android:icon="@drawable/praise"
+        android:title="@string/praised"
+        app:showAsAction="always" />
+</menu>

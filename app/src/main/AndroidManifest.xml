@@ -15,7 +15,6 @@
         <activity
             android:name=".presenter.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:hardwareAccelerated="true"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -26,6 +25,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:label=""
+            android:name=".presenter.activity.DetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MainTheme">
         </activity>
     </application>
 

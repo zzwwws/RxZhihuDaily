@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.model.entities.Story;
+import com.github.zzwwws.rxzhihudaily.presenter.infr.RecyclerOnItemClickListener;
 import com.github.zzwwws.rxzhihudaily.presenter.ui.widget.AutoScrollViewPager;
 import com.github.zzwwws.rxzhihudaily.presenter.ui.widget.ViewPagerCompact;
 
@@ -22,11 +23,12 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by zzwwws on 2016/2/18.
  */
-public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class StoriesAdapter extends BaseRecyclerAdapter<RecyclerView.ViewHolder> {
 
     public static final int TYPE_HEADER = 0x01;
     public static final int TYPE_LIST_ITEM = 0x02;
@@ -39,12 +41,14 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private TopStoryAdapter topStoryAdapter;
 
+    private RecyclerOnItemClickListener listener;
+
     public StoriesAdapter(Context context, Feed feed) {
         this.context = context;
         init(feed);
     }
 
-    public void loadingNewStories(Feed feed){
+    public void loadingNewStories(Feed feed) {
         init(feed);
         notifyDataSetChanged();
     }
@@ -52,7 +56,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void loadingOldStories(Feed feed, String date) {
         List<Story> tmpStory = feed.getStories();
         if (tmpStory != null && tmpStory.size() > 0) {
-            for(Story story : tmpStory){
+            for (Story story : tmpStory) {
                 story.setDate(date);
             }
             storyHeadPos.add(this.stories.size() + 1);
@@ -61,9 +65,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void init(Feed feed){
-        if(stories != null)stories.clear();
-        if(storyHeadPos != null)storyHeadPos.clear();
+    private void init(Feed feed) {
+        if (stories != null) stories.clear();
+        if (storyHeadPos != null) storyHeadPos.clear();
         this.feed = feed;
         if (this.feed != null) {
             this.stories = this.feed.getStories();
@@ -71,13 +75,14 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public List<Integer> getStoryHeadPos(){
+    public List<Integer> getStoryHeadPos() {
         return this.storyHeadPos;
     }
 
-    public String getTitleByHeadPos(int head){
+    public String getTitleByHeadPos(int head) {
         return feed.getStories().get(head).getDate();
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
@@ -98,9 +103,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TopViewHolder) {
-            bindPagerData((TopViewHolder)holder);
+            bindPagerData((TopViewHolder) holder);
         } else if (holder instanceof StoryViewHolder) {
-            bindStoryData((StoryViewHolder)holder, position);
+            bindStoryData((StoryViewHolder) holder, position);
         }
     }
 
@@ -121,20 +126,26 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return position == 0;
     }
 
+    @Override
+    public void setOnItemClickListener(RecyclerOnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+
     public static class TopViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.top_story_pager)
         AutoScrollViewPager topStoryPager;
         @Bind(R.id.top_pager_indicator)
         LinearLayout topPagerIndicator;
 
-        public TopViewHolder(View itemView){
+        public TopViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
     }
 
-    public static class StoryViewHolder extends RecyclerView.ViewHolder {
+    public static class StoryViewHolder extends RecyclerView.ViewHolder{
         @Bind(R.id.tv_story_title)
         TextView tvStoryTitle;
         @Bind(R.id.img_story_pic)
@@ -144,11 +155,14 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @Bind(R.id.img_story_multi_flag)
         ImageView imgStoryMultiFlag;
 
-        public StoryViewHolder(View itemView){
+        public StoryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
+        public View getView(){
+            return this.itemView;
+        }
     }
 
     private void bindPagerData(final TopViewHolder holder) {
@@ -156,6 +170,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             topStoryAdapter = new TopStoryAdapter(context, feed.getTopStories());
         }
 
+        topStoryAdapter.setOnItemClickListener(listener);
         AutoScrollViewPager pager = holder.topStoryPager;
 
         pager.setAdapter(topStoryAdapter);
@@ -191,14 +206,14 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void bindStoryData(StoryViewHolder holder, int position) {
-        int tPos = position - 1;
+        final int tPos = position - 1;
 
-        List<Story> stories = feed.getStories();
+        final List<Story> stories = feed.getStories();
         //TOP STORY TITLE
         if (storyHeadPos.contains(position)) {
             holder.tvStoryTitle.setVisibility(View.VISIBLE);
-            holder.tvStoryTitle.setText(position == 1? "今日热闻": stories.get(tPos).getDate());
-        }else{
+            holder.tvStoryTitle.setText(position == 1 ? "今日热闻" : stories.get(tPos).getDate());
+        } else {
             holder.tvStoryTitle.setVisibility(View.GONE);
         }
 
@@ -211,6 +226,13 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .error(R.drawable.image_small_default)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.imgStoryPic);
-        holder.imgStoryMultiFlag.setVisibility(stories.get(tPos).getMultipic()?View.VISIBLE:View.GONE);
+        holder.imgStoryMultiFlag.setVisibility(stories.get(tPos).getMultipic() ? View.VISIBLE : View.GONE);
+
+        holder.getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClickListener(v, stories.get(tPos).getId()+"");
+            }
+        });
     }
 }

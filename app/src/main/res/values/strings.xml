@@ -17,6 +17,10 @@
     <string name="dark_mode">夜间模式</string>
     <string name="setting_mode">设置选项</string>
     <string name="attention">关注</string>
+    <string name="share">分享</string>
+    <string name="favorite">收藏</string>
+    <string name="comment">评论</string>
+    <string name="praised">赞</string>
 
     <string name="chief_editor">主编</string>
 

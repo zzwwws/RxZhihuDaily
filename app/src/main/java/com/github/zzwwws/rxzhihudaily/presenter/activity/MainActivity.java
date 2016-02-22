@@ -130,6 +130,9 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
 
     @Override
     public void bindTopics(List<TopicWrapper> topics) {
+        if(topics == null || topics.size() == 0){
+            topics = menuImpl.getDefaultTopicList(this.topics);
+        }
         menuAdapter.initData(topics);
     }
 
@@ -178,6 +181,11 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
     }
 
     @Override
+    public void onItemClickListener(View v, String id) {
+
+    }
+
+    @Override
     protected void switchContent(BaseFragment from, BaseFragment to, Bundle bundle) {
         super.switchContent(from, to, bundle);
         currentPage = from == homeFragment?TOPIC_PAGE:HOME_PAGE;
@@ -187,6 +195,7 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
         toolbar.setTitle(name);
         invalidateOptionsMenu();
     }
+
 
     private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
         @Override
