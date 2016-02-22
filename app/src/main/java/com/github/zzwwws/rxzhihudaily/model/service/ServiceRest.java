@@ -35,62 +35,85 @@ public class ServiceRest {
 
     private static final String TAG = "ServiceRest";
 
-    private ServiceApi serviceApi;
-
     public ServiceRest() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(createCachedClient())
-                .baseUrl(AppConfig.BASE_URL)
-                .addConverterFactory(JacksonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        serviceApi = retrofit.create(ServiceApi.class);
     }
 
     public static ServiceRest getInstance() {
         return SingletonHolder.instance;
     }
 
+    private ServiceApi rtcService(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(createRtcClient())
+                .baseUrl(AppConfig.BASE_URL)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        return retrofit.create(ServiceApi.class);
+    }
+
+    private ServiceApi cachedService(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(createCachedClient())
+                .baseUrl(AppConfig.BASE_URL)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        return retrofit.create(ServiceApi.class);
+    }
+
     public Observable<StartImage> getStartImage(String density){
-        return serviceApi.getStartImage(density);
+        return cachedService().getStartImage(density);
     }
 
     public Observable<StoryDetail> getStoryDetail(String id){
-        return serviceApi.getStoryDetail(id);
+
+        return cachedService().getStoryDetail(id);
     }
 
     public Observable<StoryExtraInfo> getStoryExtraInfo(String id){
-        return serviceApi.getStoryExtraInfo(id);
+        return rtcService().getStoryExtraInfo(id);
     }
 
     public Observable<Comment> getShortComments(String id){
-        return serviceApi.getStoryShortComments(id);
+        return rtcService().getStoryShortComments(id);
     }
 
     public Observable<Comment> getLongComments(String id){
-        return serviceApi.getStoryLongComments(id);
+        return rtcService().getStoryLongComments(id);
     }
 
-    public Observable<Topics> fetchTopicList(){return serviceApi.getTopics();}
+    public Observable<Topics> fetchTopicList(){return cachedService().getTopics();}
 
     public Observable<Feed> fetchLatestStory() {
-        return serviceApi.fetchLatestStory();
+        return rtcService().fetchLatestStory();
     }
 
     public Observable<Feed> fetchOldStory(String date){
-        return serviceApi.fetchPastStory(date);
+        return cachedService().fetchPastStory(date);
     }
 
     public Observable<TopicDetail> fetchTopicDetail(String topicId){
-        return serviceApi.getTopicDetail(topicId);
+        return cachedService().getTopicDetail(topicId);
     }
 
     public Observable<TopicDetail> fetchOldTopicDetail(String topicId, String latestId){
-        return serviceApi.getPastTopic(topicId, latestId);
+        return cachedService().getPastTopic(topicId, latestId);
     }
 
     private static class SingletonHolder {
         private static ServiceRest instance = new ServiceRest();
+    }
+
+    private OkHttpClient createRtcClient() {
+        File httpCacheDirectory = new File(BaseApplication.get().getCacheDir(), AppConfig.CACHE_DIR_NAME);
+
+        Cache cache = new Cache(httpCacheDirectory, AppConfig.CACHE_MAX_SIZE);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor2())
+                .cache(cache)
+                .build();
+        return okHttpClient;
     }
 
     private OkHttpClient createCachedClient() {
@@ -98,7 +121,7 @@ public class ServiceRest {
 
         Cache cache = new Cache(httpCacheDirectory, AppConfig.CACHE_MAX_SIZE);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new Interceptor2())
+                .addInterceptor(new Interceptor1())
                 .cache(cache)
                 .build();
         return okHttpClient;
@@ -117,7 +140,7 @@ public class ServiceRest {
 
             String cacheControl = request.cacheControl().toString();
             if (TextUtils.isEmpty(cacheControl)) {
-                cacheControl = "public, max-age=60";
+                cacheControl = "public, max-age="+AppConfig.CACHE_TIME_DEFAULT;
             }
             return response.newBuilder()
                     .header("Cache-Control", cacheControl)

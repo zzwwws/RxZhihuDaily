@@ -51,6 +51,8 @@ public class DetailActivity extends BaseActivity implements StoryDetailView, OnC
     CoordinatorLayout coordinatorLayout;
     @Bind(R.id.tv_top_detail_title)
     TextView tvTopDetailTitle;
+    @Bind(R.id.top_story_detail)
+    View topStoryDetail;
     @Bind(R.id.tv_top_detail_source)
     TextView tvTopDetailSource;
     @Bind(R.id.scrollView)
@@ -183,6 +185,8 @@ public class DetailActivity extends BaseActivity implements StoryDetailView, OnC
 
             if (!TextUtils.isEmpty(storyDetail.getImage())) {
 //                addScrollListener();
+            }else{
+                topStoryDetail.setVisibility(View.GONE);
             }
         }
     }

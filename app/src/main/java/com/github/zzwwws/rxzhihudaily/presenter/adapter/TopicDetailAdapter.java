@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.model.entities.Story;
 import com.github.zzwwws.rxzhihudaily.model.entities.TopicDetail;
+import com.github.zzwwws.rxzhihudaily.presenter.infr.RecyclerOnItemClickListener;
 import com.github.zzwwws.rxzhihudaily.presenter.ui.view.HorizontalListView;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * Created by zzwwws on 2016/2/18.
  */
-public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TopicDetailAdapter extends BaseRecyclerAdapter<RecyclerView.ViewHolder> {
 
     public static final int TYPE_HEADER = 0x01;
     public static final int TYPE_LIST_HEADER = 0x02;
@@ -35,6 +36,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<Story> stories;
     private String latestId;
     private ChiefEditorAdapter chiefEditorAdapter;
+    private RecyclerOnItemClickListener listener;
 
     public TopicDetailAdapter(Context context, TopicDetail topicDetail) {
         this.context = context;
@@ -69,6 +71,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.notifyDataSetChanged();
         }
     }
+
 
     public String getLatestId() {
         return this.latestId;
@@ -147,7 +150,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void bindStoryData(TopicListViewHolder holder, int position){
-        int tPos = position - 2;
+        final int tPos = position - 2;
 
         holder.tvStoryDesc.setText(stories.get(tPos).getTitle());
         List<String> images = stories.get(tPos).getImages();
@@ -165,6 +168,19 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(holder.imgStoryPic);
             holder.imgStoryMultiFlag.setVisibility(stories.get(tPos).getMultipic()?View.VISIBLE:View.GONE);
         }
+        holder.getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onItemClickListener(v, stories.get(tPos).getId()+"");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void setOnItemClickListener(RecyclerOnItemClickListener listener) {
+        this.listener = listener;
     }
 
     public static class TopViewHolder extends RecyclerView.ViewHolder {
@@ -203,6 +219,9 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public TopicListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+        public View getView(){
+            return this.itemView;
         }
     }
 }
