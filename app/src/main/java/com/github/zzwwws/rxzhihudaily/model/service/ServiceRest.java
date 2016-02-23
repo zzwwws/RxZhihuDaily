@@ -6,7 +6,7 @@ import com.github.zzwwws.rxzhihudaily.common.AppConfig;
 import com.github.zzwwws.rxzhihudaily.common.BaseApplication;
 import com.github.zzwwws.rxzhihudaily.common.util.LogUtil;
 import com.github.zzwwws.rxzhihudaily.common.util.NetworkUtil;
-import com.github.zzwwws.rxzhihudaily.model.entities.Comment;
+import com.github.zzwwws.rxzhihudaily.model.entities.CommentEntities;
 import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.model.entities.StartImage;
 import com.github.zzwwws.rxzhihudaily.model.entities.StoryDetail;
@@ -16,6 +16,7 @@ import com.github.zzwwws.rxzhihudaily.model.entities.Topics;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
@@ -35,6 +36,10 @@ public class ServiceRest {
 
     private static final String TAG = "ServiceRest";
 
+    private ServiceApi rtcServiceApi;
+
+    private ServiceApi cachedServiceApi;
+
     public ServiceRest() {
     }
 
@@ -43,23 +48,30 @@ public class ServiceRest {
     }
 
     private ServiceApi rtcService(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(createRtcClient())
-                .baseUrl(AppConfig.BASE_URL)
-                .addConverterFactory(JacksonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        return retrofit.create(ServiceApi.class);
+        if(rtcServiceApi == null){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(createRtcClient())
+                    .baseUrl(AppConfig.BASE_URL)
+                    .addConverterFactory(JacksonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .build();
+            rtcServiceApi = retrofit.create(ServiceApi.class);
+        }
+
+        return rtcServiceApi;
     }
 
     private ServiceApi cachedService(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(createCachedClient())
-                .baseUrl(AppConfig.BASE_URL)
-                .addConverterFactory(JacksonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        return retrofit.create(ServiceApi.class);
+        if(cachedServiceApi == null){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(createCachedClient())
+                    .baseUrl(AppConfig.BASE_URL)
+                    .addConverterFactory(JacksonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .build();
+            cachedServiceApi = retrofit.create(ServiceApi.class);
+        }
+        return cachedServiceApi;
     }
 
     public Observable<StartImage> getStartImage(String density){
@@ -75,11 +87,11 @@ public class ServiceRest {
         return rtcService().getStoryExtraInfo(id);
     }
 
-    public Observable<Comment> getShortComments(String id){
+    public Observable<CommentEntities> getShortComments(String id){
         return rtcService().getStoryShortComments(id);
     }
 
-    public Observable<Comment> getLongComments(String id){
+    public Observable<CommentEntities> getLongComments(String id){
         return rtcService().getStoryLongComments(id);
     }
 

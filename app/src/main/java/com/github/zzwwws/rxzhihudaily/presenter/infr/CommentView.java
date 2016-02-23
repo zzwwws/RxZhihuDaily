@@ -1,5 +1,7 @@
 package com.github.zzwwws.rxzhihudaily.presenter.infr;
 
+import android.view.View;
+
 import com.github.zzwwws.rxzhihudaily.model.entities.Comment;
 
 import java.util.List;
@@ -11,11 +13,7 @@ public interface CommentView {
 
     void showLongComments(List<Comment> longComments);
 
-    void showShortComments(List<Comment> shortComments);
+    void loadShortComments(List<Comment> shortComments);
 
-    void showLike(String uid, boolean like);
-
-    void report(String uid);
-
-    void replyTo(String uid);
+    void onCommentClick(View view, Comment comment);
 }

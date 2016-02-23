@@ -40,6 +40,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/MainTheme">
         </activity>
+        <activity
+            android:name=".presenter.activity.CommentActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MainTheme">
+        </activity>
     </application>
 
 </manifest>

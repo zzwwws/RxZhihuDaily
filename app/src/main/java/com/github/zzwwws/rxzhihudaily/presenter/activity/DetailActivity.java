@@ -1,5 +1,6 @@
 package com.github.zzwwws.rxzhihudaily.presenter.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -64,6 +65,7 @@ public class DetailActivity extends BaseActivity implements StoryDetailView, OnC
     private StoryDetailImpl detailImpl;
 
     private ViewHolder toolbarHolder;
+    private int commentCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +85,7 @@ public class DetailActivity extends BaseActivity implements StoryDetailView, OnC
 //        });
         LayoutInflater inflater = LayoutInflater.from(this);
         View customToolbar = inflater.inflate(R.layout.toolbar_story_detail, null);
-        toolbarHolder = new ViewHolder(customToolbar);
+        toolbarHolder = new ViewHolder(customToolbar, this);
         toolbar.addView(customToolbar);
         toolbar.setOnMenuItemClickListener(onMenuItemClickListener);
         initData();
@@ -161,6 +163,7 @@ public class DetailActivity extends BaseActivity implements StoryDetailView, OnC
     }
 
     private void bindToolbar(StoryExtraInfo info) {
+        commentCount = info.getComments();
         toolbarHolder.tvComment.setText(info.getComments() + "");
         toolbarHolder.tvPraise.setText(info.getPopularity() + "");
         toolbarHolder.tvComment.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -240,8 +243,24 @@ public class DetailActivity extends BaseActivity implements StoryDetailView, OnC
     };
 
     @Override
-    public void onClick(View v) {
-
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.lly_praise:
+                break;
+            case R.id.lly_comment:
+                Intent intent = new Intent(this, CommentActivity.class);
+                intent.putExtra("id", newsId);
+                intent.putExtra("comment_count", commentCount);
+                startActivity(intent);
+                break;
+            case R.id.img_collect:
+                break;
+            case R.id.img_share:
+                break;
+            case R.id.img_back:
+                onBackPressed();
+                break;
+        }
     }
 
     static class ViewHolder implements OnClickListener {
@@ -263,26 +282,18 @@ public class DetailActivity extends BaseActivity implements StoryDetailView, OnC
         ImageView imgShare;
         @Bind(R.id.img_back)
         ImageView imgBack;
+        OnClickListener listener;
 
 
-        ViewHolder(View view) {
+        ViewHolder(View view, OnClickListener listener) {
             ButterKnife.bind(this, view);
+            this.listener = listener;
         }
 
-        @OnClick({R.id.lly_praise, R.id.lly_comment, R.id.img_collect, R.id.img_share})
+        @OnClick({R.id.lly_praise, R.id.lly_comment, R.id.img_collect, R.id.img_share, R.id.img_back})
         public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.lly_praise:
-                    break;
-                case R.id.lly_comment:
-                    break;
-                case R.id.img_collect:
-                    break;
-                case R.id.img_share:
-                    break;
-                case R.id.img_back:
-
-                    break;
+            if(listener != null){
+                listener.onClick(view);
             }
         }
     }

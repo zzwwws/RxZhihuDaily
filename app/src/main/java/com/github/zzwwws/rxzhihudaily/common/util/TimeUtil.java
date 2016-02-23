@@ -103,6 +103,11 @@ public class TimeUtil {
         String weekDay = getWeekOfDate(new Date(mis));
         return mmdd +" "+weekDay;
     }
+
+    public static String getCommentDataStringDisplay(long millisecond){
+        String fully = FULL_DIVIDE_SDF.format(new Date(millisecond));
+        return fully.substring(5,16);
+    }
     public static String getBeijingNowTime(String format) {
         TimeZone timezone = TimeZone.getTimeZone("Asia/Shanghai");
 

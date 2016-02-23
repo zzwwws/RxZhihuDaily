@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="54dp"
+    android:orientation="vertical">
+    <View
+        android:layout_alignParentTop="true"
+        android:id="@+id/view_split2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_alpha_15_000000"/>
+
+    <TextView
+        android:layout_marginLeft="15dp"
+        android:text="@string/comment_count_long"
+        android:id="@+id/tv_comment_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="@color/color_topic_chief_editor" />
+    <ImageView
+        android:layout_marginRight="10dp"
+        android:id="@+id/img_comment_fold"
+        android:padding="10dp"
+        android:src="@drawable/comment_icon_fold"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

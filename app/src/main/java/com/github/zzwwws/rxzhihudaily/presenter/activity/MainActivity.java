@@ -146,44 +146,6 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
 
     }
 
-    @Override
-    public void onItemClickListener(View v, int pos) {
-        switch (v.getId()){
-            case R.id.lly_header_home:
-                if(homeFragment == null){
-                    homeFragment = new HomeFragment();
-                }
-                drawerLayout.closeDrawers();
-                switchContent(topicFragment, homeFragment, null);
-                switchToolbarTheme(currentPage, getString(R.string.homepage));
-                break;
-            default:
-                if(v instanceof TextView){
-                    TopicWrapper topic= (TopicWrapper)v.getTag();
-                    if(topicFragment == null){
-                        topicFragment = new TopicFragment();
-                    }
-                    topicFragment.setTopicId(topic.getId() + "");
-                    drawerLayout.closeDrawers();
-
-                    //replace or transaction
-                    if(currentPage == HOME_PAGE){
-                        switchContent(homeFragment, topicFragment, null);
-                    }else {
-                        topicFragment.replace(topic.getId()+"");
-                    }
-                    switchToolbarTheme(currentPage, topic.getName());
-                }else if(v instanceof ImageView){
-                    // TODO: 2016/2/20 add favorite
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onItemClickListener(View v, String id) {
-
-    }
 
     @Override
     protected void switchContent(BaseFragment from, BaseFragment to, Bundle bundle) {
@@ -217,4 +179,38 @@ public class MainActivity extends BaseActivity implements MenuRecyclerView, Recy
             return false;
         }
     };
+
+    @Override
+    public void onItemClickListener(View v, Object obj) {
+        switch (v.getId()){
+            case R.id.lly_header_home:
+                if(homeFragment == null){
+                    homeFragment = new HomeFragment();
+                }
+                drawerLayout.closeDrawers();
+                switchContent(topicFragment, homeFragment, null);
+                switchToolbarTheme(currentPage, getString(R.string.homepage));
+                break;
+            default:
+                if(v instanceof TextView){
+                    TopicWrapper topic= (TopicWrapper)v.getTag();
+                    if(topicFragment == null){
+                        topicFragment = new TopicFragment();
+                    }
+                    topicFragment.setTopicId(topic.getId() + "");
+                    drawerLayout.closeDrawers();
+
+                    //replace or transaction
+                    if(currentPage == HOME_PAGE){
+                        switchContent(homeFragment, topicFragment, null);
+                    }else {
+                        topicFragment.replace(topic.getId()+"");
+                    }
+                    switchToolbarTheme(currentPage, topic.getName());
+                }else if(v instanceof ImageView){
+                    // TODO: 2016/2/20 add favorite
+                }
+                break;
+        }
+    }
 }

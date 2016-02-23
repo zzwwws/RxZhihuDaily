@@ -1,6 +1,7 @@
 package com.github.zzwwws.rxzhihudaily.model.service;
 
 import com.github.zzwwws.rxzhihudaily.model.entities.Comment;
+import com.github.zzwwws.rxzhihudaily.model.entities.CommentEntities;
 import com.github.zzwwws.rxzhihudaily.model.entities.Feed;
 import com.github.zzwwws.rxzhihudaily.model.entities.StartImage;
 import com.github.zzwwws.rxzhihudaily.model.entities.Story;
@@ -8,6 +9,8 @@ import com.github.zzwwws.rxzhihudaily.model.entities.StoryDetail;
 import com.github.zzwwws.rxzhihudaily.model.entities.StoryExtraInfo;
 import com.github.zzwwws.rxzhihudaily.model.entities.TopicDetail;
 import com.github.zzwwws.rxzhihudaily.model.entities.Topics;
+
+import java.util.List;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -44,9 +47,9 @@ public interface ServiceApi {
     Observable<StoryExtraInfo> getStoryExtraInfo(@Path("id") String id);
 
     @GET("4/story/{id}/long-comments")
-    Observable<Comment> getStoryLongComments(@Path("id") String id);
+    Observable<CommentEntities> getStoryLongComments(@Path("id") String id);
 
     @GET("4/story/{id}/short-comments")
-    Observable<Comment> getStoryShortComments(@Path("id") String id);
+    Observable<CommentEntities> getStoryShortComments(@Path("id") String id);
 
 }

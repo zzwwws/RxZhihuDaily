@@ -24,4 +24,10 @@
 
     <string name="chief_editor">主编</string>
 
+    <string name="comment_count">%1$d条点评</string>
+    <string name="comment_count_long">%1$d条长评</string>
+    <string name="comment_count_short">%1$d条短评</string>
+    <string name="comment_count_long_empty">0条长评</string>
+    <string name="comment_count_short_empty">0条短评</string>
+    <string name="comment_empty_long">深度长评虚位以待</string>
 </resources>

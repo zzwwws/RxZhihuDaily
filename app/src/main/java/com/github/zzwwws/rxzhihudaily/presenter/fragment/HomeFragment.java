@@ -135,16 +135,14 @@ public class HomeFragment extends BaseFragment implements HomeRecyclerView, Recy
     }
 
     @Override
-    public void onItemClickListener(View v, int pos) {
-
-    }
-
-    @Override
-    public void onItemClickListener(View v, String id) {
-        if(!TextUtils.isEmpty(id)){
-            Intent intent = new Intent(getActivity(), DetailActivity.class);
-            intent.putExtra("id", id);
-            getActivity().startActivity(intent);
+    public void onItemClickListener(View v, Object obj) {
+        if(obj instanceof String){
+            String id = (String)obj;
+            if(!TextUtils.isEmpty(id)){
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("id", id);
+                getActivity().startActivity(intent);
+            }
         }
     }
 }

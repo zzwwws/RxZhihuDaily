@@ -36,6 +36,8 @@ public class Comment {
     private Integer likes;
     @JsonProperty("reply_to")
     private ReplyTo replyTo;
+
+    private int type;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -179,6 +181,13 @@ public class Comment {
         this.replyTo = replyTo;
     }
 
+    public int getType(){
+        return this.type;
+    }
+
+    public void setType(int type){
+        this.type = type;
+    }
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;

@@ -11,7 +11,9 @@
     <color name="color_alpha_90_4c3f3f">#E54c3f3f</color>
     <color name="color_alpha_85_000000">#d8000000</color>
     <color name="color_alpha_80_000000">#cc000000</color>
+    <color name="color_alpha_50_000000">#90000000</color>
     <color name="color_alpha_40_000000">#66000000</color>
+    <color name="color_alpha_30_000000">#4C000000</color>
     <color name="color_alpha_15_000000">#26000000</color>
     <color name="color_alpha_10_000000">#19000000</color>
     <color name="color_alpha_40_ffffff">#99ffffff</color>
