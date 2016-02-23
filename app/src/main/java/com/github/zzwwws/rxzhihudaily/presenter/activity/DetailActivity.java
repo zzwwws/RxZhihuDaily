@@ -237,7 +237,7 @@ public class DetailActivity extends BaseActivity implements StoryDetailView, OnC
 
     @Override
     public void onClick(View v) {
-        
+
     }
 
     static class ViewHolder implements OnClickListener {
