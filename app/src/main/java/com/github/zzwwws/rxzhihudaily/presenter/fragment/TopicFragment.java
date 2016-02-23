@@ -1,17 +1,21 @@
 package com.github.zzwwws.rxzhihudaily.presenter.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.zzwwws.rxzhihudaily.R;
 import com.github.zzwwws.rxzhihudaily.model.entities.TopicDetail;
+import com.github.zzwwws.rxzhihudaily.presenter.activity.DetailActivity;
 import com.github.zzwwws.rxzhihudaily.presenter.adapter.TopicDetailAdapter;
+import com.github.zzwwws.rxzhihudaily.presenter.infr.RecyclerOnItemClickListener;
 import com.github.zzwwws.rxzhihudaily.presenter.infr.TopicScrollListener;
 import com.github.zzwwws.rxzhihudaily.presenter.infr.TopicRecyclerView;
 import com.github.zzwwws.rxzhihudaily.presenter.impl.TopicsDetailImpl;
@@ -22,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * Created by zzwwws on 2016/2/19.
  */
-public class TopicFragment extends BaseFragment implements TopicRecyclerView {
+public class TopicFragment extends BaseFragment implements TopicRecyclerView,RecyclerOnItemClickListener {
 
     protected View rootView;
     @Bind(R.id.topic_recycler)
@@ -64,6 +68,7 @@ public class TopicFragment extends BaseFragment implements TopicRecyclerView {
     }
     private void initData(){
         topicDetailAdapter = new TopicDetailAdapter(getActivity(), new TopicDetail());
+        topicDetailAdapter.setOnItemClickListener(this);
         topicRecyclerView.setHasFixedSize(true);
         topicRecyclerView.setAdapter(topicDetailAdapter);
         topicLayoutManager = new LinearLayoutManager(getActivity());
@@ -134,5 +139,19 @@ public class TopicFragment extends BaseFragment implements TopicRecyclerView {
 
     public void replace(String id){
         topicsImpl.loadingNew(id);
+    }
+
+    @Override
+    public void onItemClickListener(View v, int pos) {
+
+    }
+
+    @Override
+    public void onItemClickListener(View v, String id) {
+        if(!TextUtils.isEmpty(id)){
+            Intent intent = new Intent(getActivity(), DetailActivity.class);
+            intent.putExtra("id", id);
+            getActivity().startActivity(intent);
+        }
     }
 }

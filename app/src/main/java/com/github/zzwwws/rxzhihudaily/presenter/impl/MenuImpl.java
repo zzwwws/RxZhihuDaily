@@ -63,9 +63,10 @@ public class MenuImpl implements MenuPresenter<MenuRecyclerView> {
 
     public List<TopicWrapper> getDefaultTopicList(String[] topics){
         List<TopicWrapper> topicList = new ArrayList<>();
-        for(String topicName : topics){
+        for(String topicWrapper : topics){
             TopicWrapper topic = new TopicWrapper();
-            topic.setName(topicName);
+            topic.setName(topicWrapper.split(",")[0]);
+            topic.setId(Integer.parseInt(topicWrapper.split(",")[1]));
             topicList.add(topic);
         }
         return topicList;

@@ -10,7 +10,7 @@ import com.github.zzwwws.rxzhihudaily.common.BaseApplication;
 import java.lang.reflect.Field;
 
 public class ScreenUtil {
-    private static final String TAG = "Yixin.ScreenUtil";
+    private static final String TAG = "ScreenUtil";
     public static int screenWidth;
     public static int screenHeight;
     public static int screenMin;// 宽高中，较小的值
@@ -118,5 +118,9 @@ public class ScreenUtil {
     public static int getDialogWidth() {
         dialogWidth = (int) (getScreenMin() * RATIO);
         return dialogWidth;
+    }
+
+    public static String getImageDensity(){
+        return getDisplayWidth()+"*"+getDisplayHeight();
     }
 }
