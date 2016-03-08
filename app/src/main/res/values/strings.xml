@@ -30,4 +30,20 @@
     <string name="comment_count_long_empty">0条长评</string>
     <string name="comment_count_short_empty">0条短评</string>
     <string name="comment_empty_long">深度长评虚位以待</string>
+
+    <!--设置-->
+    <string name="setting_common">常规</string>
+    <string name="setting_offline_title">自动离线下载</string>
+    <string name="setting_offline_content">仅Wi-Fi下可用，自动下载最新内容</string>
+    <string name="setting_no_pic_title">无图模式</string>
+    <string name="setting_no_pic_content">2G/3G网络下不下载图片</string>
+    <string name="setting_big_style">大字号</string>
+    <string name="setting_other">其它</string>
+    <string name="setting_push">推送消息</string>
+    <string name="setting_share">点评分享到微博</string>
+    <string name="setting_clear_cache">清除缓存</string>
+    <string name="setting_check_update">检查更新</string>
+    <string name="setting_version_code">版本：%1$s(%2$s)</string>
+    <string name="setting_feedback_title">反馈</string>
+    <string name="setting_feedback_content">意见反馈</string>
 </resources>
